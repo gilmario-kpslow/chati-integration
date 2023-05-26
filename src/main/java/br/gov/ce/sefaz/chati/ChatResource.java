@@ -43,14 +43,14 @@ public class ChatResource {
     @Produces(value = {MediaType.APPLICATION_JSON})
     public ChatRegistroDTO getListaChat(@PathParam("chave") String chave) {
         System.out.println(chave);
-        return service.getLista().get(0);
+        return service.getByChave(chave);
     }
 
     @GET
     @Path("executar/{chave}")
-    @Produces(value = {MediaType.APPLICATION_JSON})
     public void executar(@PathParam("chave") String chave) {
         System.out.println(chave);
-//        return service.getLista().get(0);
+
+        service.execute(chave);
     }
 }

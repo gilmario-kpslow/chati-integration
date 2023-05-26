@@ -155,7 +155,6 @@ const hideModal = () => {
     const btn = document.querySelector('button[data-bs-dismiss]');
     btn.click();
     console.log(btn);
-
 };
 
 const lista = (e) => {
@@ -172,6 +171,30 @@ const lista = (e) => {
         resp.json().then(d => {
             console.log(d);
             criarLista(d);
+            hideLoader();
+        }).catch((e) => {
+            error(e);
+            hideLoader();
+        });
+    }).catch((e) => {
+        error(e);
+        hideLoader();
+    });
+};
+
+const executar = (id) => {
+    showLoader();
+    const req = new Request('registro/executar/' + id,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+    fetch(req).then((resp) => {
+        resp.json().then(d => {
+            console.log(d);
             hideLoader();
         }).catch((e) => {
             error(e);
@@ -221,6 +244,16 @@ const criarLista = (lista) => {
         info.classList.add('info');
         info.textContent = a.mensagem;
         card.appendChild(info);
+
+        const botao = document.createElement('button');
+        botao.classList.add('btn');
+        botao.classList.add('btn-outline-primary');
+        botao.textContent = "Executar";
+        botao.addEventListener('click', () => {
+            executar(a.id);
+        })
+
+        card.append(botao);
 
         div.appendChild(card);
 
