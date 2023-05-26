@@ -184,7 +184,7 @@ const lista = (e) => {
 
 const executar = (id) => {
     showLoader();
-    const req = new Request('registro/executar/' + id,
+    const req = new Request('registro/executar/' + id + "?nome=gilmario&idade=37",
             {
                 method: 'GET',
                 headers: {
@@ -193,13 +193,7 @@ const executar = (id) => {
             });
 
     fetch(req).then((resp) => {
-        resp.json().then(d => {
-            console.log(d);
-            hideLoader();
-        }).catch((e) => {
-            error(e);
-            hideLoader();
-        });
+        hideLoader();
     }).catch((e) => {
         error(e);
         hideLoader();
@@ -251,7 +245,7 @@ const criarLista = (lista) => {
         botao.textContent = "Executar";
         botao.addEventListener('click', () => {
             executar(a.id);
-        })
+        });
 
         card.append(botao);
 

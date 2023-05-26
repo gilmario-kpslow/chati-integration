@@ -1,10 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.gov.ce.sefaz.chati;
 
+import br.gov.ce.sefaz.chati.executor.GoogleChatServiceInterface;
+import br.gov.ce.sefaz.chati.executor.GoogleChatServiceOption;
+import br.gov.ce.sefaz.chati.executor.GoogleMensagemDTO;
 import java.net.URI;
+import java.util.Objects;
 import javax.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
@@ -15,14 +15,22 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
 @ApplicationScoped
 public class ChatExecutor {
 
-    public void executar(ChatRegistroDTO dto) {
+    final static String proxyUrl = System.getenv("PROXY_HOST");
+    final static String port = System.getenv("PROXY_PORT");
 
-        GoogleChatServiceInterface service = RestClientBuilder.newBuilder()
-                .baseUri(URI.create(dto.getUrl()))
+    public void executar(String url, String mensagem) {
+
+        RestClientBuilder builder = RestClientBuilder.newBuilder();
+        if (Objects.nonNull(proxyUrl) && Objects.nonNull(port)) {
+            builder = builder.proxyAddress(proxyUrl, Integer.parseInt(port));
+        }
+
+        GoogleChatServiceInterface service = builder
+                .baseUri(URI.create(url))
                 .register(GoogleChatServiceOption.class)
                 .build(GoogleChatServiceInterface.class);
 
-        service.enviarMessagem(new GoogleMensagemDTO(dto.getMensagem()));
+        service.enviarMessagem(new GoogleMensagemDTO(mensagem));
 
     }
 

@@ -9,7 +9,10 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 /**
  *
@@ -48,9 +51,10 @@ public class ChatResource {
 
     @GET
     @Path("executar/{chave}")
-    public void executar(@PathParam("chave") String chave) {
-        System.out.println(chave);
+    public void executar(@PathParam("chave") String chave, @Context UriInfo uriInfo) {
+        System.out.println(uriInfo.getQueryParameters());
 
-        service.execute(chave);
+        MultivaluedMap<String, String> values = uriInfo.getQueryParameters();
+        service.execute(chave, values);
     }
 }

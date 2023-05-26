@@ -2,9 +2,11 @@ package br.gov.ce.sefaz.chati;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.core.MultivaluedMap;
 
 /**
  *
@@ -37,9 +39,20 @@ public class ChatService {
         }
     }
 
-    public void execute(String chave) {
+    public void execute(String chave, MultivaluedMap<String, String> values) {
         ChatRegistroDTO dto = getByChave(chave);
-        executor.executar(dto);
+
+//        StringBuilder mensagemFormatada = new StringBuilder(dto.getMensagem());
+        String mesagem = dto.getMensagem();
+        if (Objects.nonNull(values)) {
+            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
+                String key = entry.getKey();
+                List<String> value = entry.getValue();
+                mesagem = mesagem.replaceAll("\\$\\{" + key + "\\}", value.get(0));
+            }
+        }
+        System.out.println(mesagem);
+        executor.executar(dto.getUrl(), mesagem);
     }
 
     public ChatRegistroDTO getByChave(String chave) {
