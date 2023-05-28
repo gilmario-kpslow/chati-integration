@@ -1,35 +1,61 @@
 package br.gov.ce.sefaz.chati;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.core.MultivaluedMap;
+import org.bson.Document;
 
 /**
  *
  * @author gilmario
  */
-@Singleton
+@ApplicationScoped
 public class ChatService {
 
-    private static List<ChatRegistroDTO> lista = new ArrayList<>();
+    @Inject
+    MongoClient mongoClient;
 
     @Inject
     ChatExecutor executor;
 
-    public void save(ChatRegistroDTO registro) {
-        validar(registro);
-        lista.add(registro);
+    private MongoCollection getCollection() {
+        return mongoClient.getDatabase("chati").getCollection("chat_registro");
     }
 
-    public List<ChatRegistroDTO> getLista() {
+    public List<ChatRegistro> lista() {
+        List<ChatRegistro> lista = new ArrayList<>();
+        try (MongoCursor<Document> cursor = getCollection().find().iterator()) {
+            while (cursor.hasNext()) {
+                Document document = cursor.next();
+                ChatRegistro registro = new ChatRegistro();
+                registro.setTitulo(document.getString("titulo"));
+                registro.setMensagem(document.getString("mensagem"));
+                registro.setId(document.getString("id"));
+                registro.setUrl(document.getString("url"));
+                lista.add(registro);
+            }
+        }
         return lista;
     }
 
-    private void validar(ChatRegistroDTO registro) {
+    public void save(ChatRegistro registro) {
+        validar(registro);
+        Document document = new Document()
+                .append("titulo", registro.getTitulo())
+                .append("mensagem", registro.getMensagem())
+                .append("id", registro.getId())
+                .append("url", registro.getUrl());
+        getCollection().insertOne(document);
+    }
+
+    private void validar(ChatRegistro registro) {
         if (Objects.isNull(registro)) {
             throw new RuntimeException("Dados inválidos");
         }
@@ -40,7 +66,7 @@ public class ChatService {
     }
 
     public void execute(String chave, MultivaluedMap<String, String> values) {
-        ChatRegistroDTO dto = getByChave(chave);
+        ChatRegistro dto = getByChave(chave);
 
 //        StringBuilder mensagemFormatada = new StringBuilder(dto.getMensagem());
         String mesagem = dto.getMensagem();
@@ -55,7 +81,7 @@ public class ChatService {
         executor.executar(dto.getUrl(), mesagem);
     }
 
-    public ChatRegistroDTO getByChave(String chave) {
-        return getLista().stream().filter(p -> p.getId().equals(chave)).findFirst().orElseThrow(() -> new RuntimeException("Chave não encontrada"));
+    public ChatRegistro getByChave(String chave) {
+        return lista().stream().filter(p -> p.getId().equals(chave)).findFirst().orElseThrow(() -> new RuntimeException("Chave não encontrada"));
     }
 }

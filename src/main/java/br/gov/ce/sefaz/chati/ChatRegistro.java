@@ -9,7 +9,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class ChatRegistroDTO {
+public class ChatRegistro {
 
     private String titulo;
     private String mensagem;

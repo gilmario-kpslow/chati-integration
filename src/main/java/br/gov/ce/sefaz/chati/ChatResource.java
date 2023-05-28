@@ -27,7 +27,7 @@ public class ChatResource {
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response cadastro(ChatRegistroDTO chat) {
+    public Response cadastro(ChatRegistro chat) {
         Response r = new Response();
         r.setResposta(UUID.randomUUID().toString());
         chat.setId(r.getResposta());
@@ -37,15 +37,14 @@ public class ChatResource {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public List<ChatRegistroDTO> getLista() {
-        return service.getLista();
+    public List<ChatRegistro> getLista() {
+        return service.lista();
     }
 
     @GET
     @Path("getid/{chave}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public ChatRegistroDTO getListaChat(@PathParam("chave") String chave) {
-        System.out.println(chave);
+    public ChatRegistro getListaChat(@PathParam("chave") String chave) {
         return service.getByChave(chave);
     }
 

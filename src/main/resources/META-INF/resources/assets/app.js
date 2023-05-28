@@ -228,29 +228,40 @@ const criarLista = (lista) => {
         card.classList.add('rounded');
         card.classList.add('p-4');
         card.classList.add('mb-2');
+        card.classList.add('hover-efect');
+
+
 
         const titulo = document.createElement('div');
         titulo.classList.add('h4');
         titulo.textContent = a.titulo;
         card.appendChild(titulo);
 
+        const id = document.createElement('div');
+        id.classList.add('fs-6');
+        id.classList.add('text-secondary');
+        id.classList.add('opacity-50');
+        id.classList.add('shadow-sm');
+        id.textContent = a.id;
+        card.appendChild(id);
+
         const info = document.createElement('div');
         info.classList.add('info');
+        info.classList.add('mb-1');
+        info.classList.add('border-top');
         info.textContent = a.mensagem;
         card.appendChild(info);
 
         const botao = document.createElement('button');
         botao.classList.add('btn');
         botao.classList.add('btn-outline-primary');
-        botao.textContent = "Executar";
+        botao.textContent = "Teste";
         botao.addEventListener('click', () => {
-            executar(a.id);
+            showEdit(a);
         });
 
         card.append(botao);
-
         div.appendChild(card);
-
         container.appendChild(div);
     });
 };
