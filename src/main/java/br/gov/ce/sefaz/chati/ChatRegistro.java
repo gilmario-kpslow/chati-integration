@@ -15,5 +15,6 @@ public class ChatRegistro {
     private String mensagem;
     private String url;
     private String id;
+    private String _id;
 
 }

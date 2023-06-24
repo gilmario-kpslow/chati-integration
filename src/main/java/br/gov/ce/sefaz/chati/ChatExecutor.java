@@ -4,8 +4,9 @@ import br.gov.ce.sefaz.chati.executor.GoogleChatServiceInterface;
 import br.gov.ce.sefaz.chati.executor.GoogleChatServiceOption;
 import br.gov.ce.sefaz.chati.executor.GoogleMensagemDTO;
 import java.net.URI;
-import java.util.Objects;
+import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 
 /**
@@ -15,14 +16,15 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
 @ApplicationScoped
 public class ChatExecutor {
 
-    final static String proxyUrl = System.getenv("PROXY_HOST");
-    final static String port = System.getenv("PROXY_PORT");
+    @ConfigProperty(name = "proxy.host")
+    Optional<String> proxyHost;
+    @ConfigProperty(name = "proxy.port")
+    Optional<Integer> proxyPort;
 
     public void executar(String url, String mensagem) {
-
         RestClientBuilder builder = RestClientBuilder.newBuilder();
-        if (Objects.nonNull(proxyUrl) && Objects.nonNull(port)) {
-            builder = builder.proxyAddress(proxyUrl, Integer.parseInt(port));
+        if (proxyHost.isPresent() && proxyPort.isPresent()) {
+            builder = builder.proxyAddress(proxyHost.get(), proxyPort.get());
         }
 
         GoogleChatServiceInterface service = builder

@@ -1,43 +1,13 @@
-
-
-//function chamada() {
-//
-//    showLoader();
-//    const mesagem = {text: "Ola eu sou o chati chato"};
-//
-//    const req = new Request('https://chat.googleapis.com/v1/spaces/AAAAIXqQ2dQ/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=RL13cy_x537y_CniJPXkAAmR_nFfDGp_OPokt0ax81w%3D',
-//            {
-//                method: 'POST',
-//                headers: {
-//                    'Content-Type': 'application/json'
-//                },
-//                body: JSON.stringify(mesagem)
-//            });
-//
-//    fetch(req).then((resp) => {
-//        resp.json().then(d => {
-//            console.log(d);
-//            hideLoader();
-//        }).catch((e) => {
-//            error(e);
-//            hideLoader();
-//        });
-//    }).catch((e) => {
-//        error(e);
-//        hideLoader();
-//    });
-//
-//
-//}
-
 const showLoader = () => {
     const loader = document.getElementById('loader');
     loader.classList.remove('d-none');
 };
 
 const hideLoader = () => {
-    const loader = document.getElementById('loader');
-    loader.classList.add('d-none');
+    setTimeout(() => {
+        const loader = document.getElementById('loader');
+        loader.classList.add('d-none');
+    }, 400);
 };
 
 const error = (e) => {
@@ -64,13 +34,16 @@ const messagem = (titulo, messagem, tipo = 'SUCCESS') => {
     const contem = document.getElementById('messagem');
     contem.appendChild(m);
 
-    setTimeout(limparMessagem, 2000);
+    limparMessagem();
 
 };
 
-const limparMessagem = () => {
-    const contem = document.getElementById('messagem');
-    contem.innerHTML = '';
+const limparMessagem = (time) => {
+    setTimeout(() => {
+        const contem = document.getElementById('messagem');
+        contem.innerHTML = '';
+    }, time || 2000);
+
 };
 
 const init = () => {
@@ -92,6 +65,9 @@ const init = () => {
             case 'create':
                 form.onclick = create;
                 break;
+            case 'delete':
+                form.onclick = deletar;
+                break;
             case 'lista':
                 form.onclick = lista;
                 break;
@@ -101,46 +77,35 @@ const init = () => {
     }
 };
 
-// Extrair os inputs de um form
 const createObjectFrom = (form) => {
     const obj = {};
     for (let i = 0; i < form.length; i++) {
-        let input = form[i];
-        console.log(input.attributes['name'].textContent);
+        const input = form[i];
         obj[input.attributes['name'].textContent] = input.value;
     }
     return obj;
 };
 
 const create = (e) => {
-//    console.log('CREATE', e.target);
     const action = e.target.attributes['data-form'].nodeValue;
-//    console.log(action);
     let s = `form[data-form='${action}']`;
-//    console.log(s);
     const form = document.querySelector(s);
-
-//    console.log(form);
     const obj = createObjectFrom(form);
-    console.log(obj);
     showLoader();
-
-    const req = new Request('registro',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(obj)
-            });
+    const req = new Request('registro', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(obj)
+    });
 
     fetch(req).then((resp) => {
         resp.json().then(d => {
-            console.log(d);
-            // Hide Modal
             hideModal();
             hideLoader();
             lista();
+            messagem("Sucesso!", "Registro criado com sucesso!", 'success');
         }).catch((e) => {
             error(e);
             hideLoader();
@@ -152,24 +117,21 @@ const create = (e) => {
 };
 
 const hideModal = () => {
-    const btn = document.querySelector('button[data-bs-dismiss]');
-    btn.click();
-    console.log(btn);
+    document.querySelectorAll('button[data-bs-dismiss]').forEach(a => a.click());
 };
 
-const lista = (e) => {
+const lista = () => {
+
     showLoader();
-    const req = new Request('registro',
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    const req = new Request('registro', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
     fetch(req).then((resp) => {
         resp.json().then(d => {
-            console.log(d);
             criarLista(d);
             hideLoader();
         }).catch((e) => {
@@ -182,27 +144,77 @@ const lista = (e) => {
     });
 };
 
-const executar = (id) => {
+const executar = (id, params) => {
     showLoader();
-    const req = new Request('registro/executar/' + id + "?nome=gilmario&idade=37",
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
+    const req = new Request(`registro/executar/${id}?${params}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
 
     fetch(req).then((resp) => {
         hideLoader();
+        if (resp.status <= 299) {
+            hideLoader();
+            messagem('OK', 'Testa enviado', 'INFO');
+        } else {
+            resp.json().then(r => {
+                messagem('Error', r.messagem, 'DANGER');
+            });
+        }
+
     }).catch((e) => {
         error(e);
         hideLoader();
     });
 };
 
+const deletar = (e) => {
+    const action = e.target.attributes['data-form'].nodeValue;
+    let s = `form[data-form='${action}']`;
+    const form = document.querySelector(s);
+    const obj = createObjectFrom(form);
+    console.log(obj);
+    showLoader();
+    const req = new Request(`registro/${obj.id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    fetch(req).then((resp) => {
+        hideLoader();
+        if (resp.status <= 299) {
+            hideModal();
+            lista();
+            messagem('Sucesso!', 'Registro excluido com sucesso', 'SUCCESS');
+            hideLoader();
+        } else {
+            resp.json().then(r => {
+                messagem('Error', r.messagem, 'DANGER');
+            });
+        }
+
+    }).catch((e) => {
+        error(e);
+        hideLoader();
+    });
+};
+
+const editar = (a) => {
+    let s = `form[data-form='create']`;
+    const form = document.querySelector(s);
+    for (let i = 0; i < form.length; i++) {
+        const input = form[i];
+        input.value = a[input.attributes['name'].textContent];
+    }
+};
+
+
 /**/
 const criarLista = (lista) => {
-
 
     const divs = document.getElementsByTagName('div');
 
@@ -214,8 +226,6 @@ const criarLista = (lista) => {
             break;
         }
     }
-
-    console.log(container);
 
     container.innerHTML = '';
 
@@ -229,8 +239,6 @@ const criarLista = (lista) => {
         card.classList.add('p-4');
         card.classList.add('mb-2');
         card.classList.add('hover-efect');
-
-
 
         const titulo = document.createElement('div');
         titulo.classList.add('h4');
@@ -252,19 +260,39 @@ const criarLista = (lista) => {
         info.textContent = a.mensagem;
         card.appendChild(info);
 
-        const botao = document.createElement('button');
-        botao.classList.add('btn');
-        botao.classList.add('btn-outline-primary');
-        botao.textContent = "Teste";
-        botao.addEventListener('click', () => {
-            showEdit(a);
-        });
+        const botaoEditar = criarBotao('Editar', () => editar(a));
+        botaoEditar.setAttribute('data-bs-target', '#exampleModal');
+        botaoEditar.setAttribute('data-bs-backdrop', 'static');
+        botaoEditar.setAttribute('data-bs-toggle', 'modal');
 
-        card.append(botao);
+        const botaoExcluir = criarBotao('Excluir', () => {
+            let s = `form[data-form='delete']`;
+            const form = document.querySelector(s);
+            form[0].value = a.id;
+        });
+        botaoExcluir.setAttribute('data-bs-target', '#confirmar');
+        botaoExcluir.setAttribute('data-bs-backdrop', 'static');
+        botaoExcluir.setAttribute('data-bs-toggle', 'modal');
+
+        card.append(botaoEditar);
+        card.append(botaoExcluir);
+        card.append(criarBotao('Teste', () => executar(a.id)));
         div.appendChild(card);
         container.appendChild(div);
     });
 };
+
+const criarBotao = (titulo, acao) => {
+    const botao = document.createElement('button');
+    botao.classList.add('btn');
+    botao.classList.add('btn-outline-primary');
+    botao.setAttribute('type', 'button');
+    botao.textContent = titulo;
+    botao.addEventListener('click', acao);
+    return botao;
+};
+
+
 
 
 init();

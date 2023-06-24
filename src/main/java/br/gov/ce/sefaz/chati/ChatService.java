@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
@@ -33,19 +34,22 @@ public class ChatService {
         List<ChatRegistro> lista = new ArrayList<>();
         try (MongoCursor<Document> cursor = getCollection().find().iterator()) {
             while (cursor.hasNext()) {
-                Document document = cursor.next();
-                ChatRegistro registro = new ChatRegistro();
-                registro.setTitulo(document.getString("titulo"));
-                registro.setMensagem(document.getString("mensagem"));
-                registro.setId(document.getString("id"));
-                registro.setUrl(document.getString("url"));
-                lista.add(registro);
+                lista.add(parse(cursor.next()));
             }
         }
         return lista;
     }
 
-    public void save(ChatRegistro registro) {
+    public ChatRegistro saveOrUpdate(ChatRegistro registro) {
+        if (Objects.isNull(registro.getId())) {
+            return this.save(registro);
+        } else {
+            return this.update(registro);
+        }
+    }
+
+    private ChatRegistro save(ChatRegistro registro) {
+        registro.setId(UUID.randomUUID().toString());
         validar(registro);
         Document document = new Document()
                 .append("titulo", registro.getTitulo())
@@ -53,6 +57,21 @@ public class ChatService {
                 .append("id", registro.getId())
                 .append("url", registro.getUrl());
         getCollection().insertOne(document);
+
+        return registro;
+    }
+
+    private ChatRegistro update(ChatRegistro registro) {
+        validar(registro);
+        Document document = new Document()
+                .append("titulo", registro.getTitulo())
+                .append("mensagem", registro.getMensagem())
+                .append("id", registro.getId())
+                .append("url", registro.getUrl());
+
+        getCollection().replaceOne(new Document().append("id", registro.getId()), document);
+
+        return registro;
     }
 
     private void validar(ChatRegistro registro) {
@@ -82,6 +101,26 @@ public class ChatService {
     }
 
     public ChatRegistro getByChave(String chave) {
-        return lista().stream().filter(p -> p.getId().equals(chave)).findFirst().orElseThrow(() -> new RuntimeException("Chave não encontrada"));
+        ChatRegistro find = null;
+        try (MongoCursor<Document> cursor = getCollection().find(new Document().append("id", chave)).iterator()) {
+            if (cursor.hasNext()) {
+                find = parse(cursor.next());
+            }
+        }
+        return find;
     }
+
+    public ChatRegistro parse(Document document) {
+        ChatRegistro registro = new ChatRegistro();
+        registro.setTitulo(document.getString("titulo"));
+        registro.setMensagem(document.getString("mensagem"));
+        registro.setId(document.getString("id"));
+        registro.setUrl(document.getString("url"));
+        return registro;
+    }
+
+    public void delete(String chave) {
+        getCollection().deleteOne(new Document("id", chave));
+    }
+
 }

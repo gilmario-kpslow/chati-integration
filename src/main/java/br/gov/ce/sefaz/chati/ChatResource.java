@@ -1,9 +1,9 @@
 package br.gov.ce.sefaz.chati;
 
 import java.util.List;
-import java.util.UUID;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,10 +28,9 @@ public class ChatResource {
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response cadastro(ChatRegistro chat) {
+        chat = service.saveOrUpdate(chat);
         Response r = new Response();
-        r.setResposta(UUID.randomUUID().toString());
-        chat.setId(r.getResposta());
-        service.save(chat);
+        r.setResposta(chat.getId());
         return r;
     }
 
@@ -48,11 +47,16 @@ public class ChatResource {
         return service.getByChave(chave);
     }
 
+    @DELETE
+    @Path("{chave}")
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    public void delete(@PathParam("chave") String chave) {
+        service.delete(chave);
+    }
+
     @GET
     @Path("executar/{chave}")
     public void executar(@PathParam("chave") String chave, @Context UriInfo uriInfo) {
-        System.out.println(uriInfo.getQueryParameters());
-
         MultivaluedMap<String, String> values = uriInfo.getQueryParameters();
         service.execute(chave, values);
     }

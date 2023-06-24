@@ -8,14 +8,14 @@
     </head>
     <body class="bg-ligth">
 
-        <div id="loader" class="loader d-none">
+        <div id="loader" class="loader d-none rounded mx-2 my-2 p-2 bg-info bg-gradient text-light">
             <div class="loader-content">
                 <i class="fa fa-refresh fa-spin fa-5x"></i>
                 <div>Aguarde... </div>
             </div>
         </div>
 
-        <div id="messagem" class="messagem">
+        <div id="messagem" class="messagem mx-2 my-2 p-2">
 
         </div>
 
@@ -79,7 +79,7 @@
 
         <!-- Modal -->
         <div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-dialog modal-ls modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Nova chamada</h1>
@@ -87,6 +87,7 @@
                     </div>
                     <div class="modal-body">
                         <form data-form="create">
+                            <input class="form-control" type="hidden" name="id">
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Título</label>
@@ -106,6 +107,27 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                         <button type="button" class="btn btn-primary" data-action="create" data-form="create">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="confirmar" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmar" aria-hidden="true">
+            <div class="modal-dialog modal-sm modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form data-form="delete">
+                            Deseja excluir o esse registro?
+                            <input class="form-control" type="hidden" name="id">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-success" data-action="delete" data-form="delete">Confirmar</button>
                     </div>
                 </div>
             </div>
