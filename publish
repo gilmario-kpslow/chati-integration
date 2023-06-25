@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker push registry.truesystem.com.br/chat-integracao:latest
+
+docker push registry.truesystem.com.br/chat-integracao:$1

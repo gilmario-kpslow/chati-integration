@@ -41,7 +41,7 @@ public class ChatService {
     }
 
     public ChatRegistro saveOrUpdate(ChatRegistro registro) {
-        if (Objects.isNull(registro.getId())) {
+        if (Objects.isNull(registro.getId()) || registro.getId().isEmpty()) {
             return this.save(registro);
         } else {
             return this.update(registro);

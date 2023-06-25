@@ -1,0 +1,6 @@
+#!/bin/bash
+
+./build-package
+./build-image $1
+./publish $1
+
