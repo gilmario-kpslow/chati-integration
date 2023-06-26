@@ -71,10 +71,23 @@ const init = () => {
             case 'lista':
                 form.onclick = lista;
                 break;
+            case 'download':
+                form.onclick = download;
+                break;
+            case 'novo':
+                form.onclick = novo;
+                break;
+            case 'upload':
+                form.onclick = upload;
+                break;
             default :
                 ;
         }
     }
+
+    const up = document.querySelector("input[data-action='upload']");
+    up.addEventListener('input', upload);
+
 };
 
 const createObjectFrom = (form) => {
@@ -91,6 +104,10 @@ const create = (e) => {
     let s = `form[data-form='${action}']`;
     const form = document.querySelector(s);
     const obj = createObjectFrom(form);
+    save(obj);
+};
+
+const save = (obj) => {
     showLoader();
     const req = new Request('registro', {
         method: 'POST',
@@ -120,27 +137,13 @@ const hideModal = () => {
     document.querySelectorAll('button[data-bs-dismiss]').forEach(a => a.click());
 };
 
+const novo = () => {
+    limpar();
+};
+
 const lista = () => {
-
-    showLoader();
-    const req = new Request('registro', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
-
-    fetch(req).then((resp) => {
-        resp.json().then(d => {
-            criarLista(d);
-            hideLoader();
-        }).catch((e) => {
-            error(e);
-            hideLoader();
-        });
-    }).catch((e) => {
-        error(e);
-        hideLoader();
+    pesquisarLista((resp) => {
+        criarLista(resp);
     });
 };
 
@@ -175,7 +178,7 @@ const deletar = (e) => {
     let s = `form[data-form='${action}']`;
     const form = document.querySelector(s);
     const obj = createObjectFrom(form);
-    console.log(obj);
+
     showLoader();
     const req = new Request(`registro/${obj.id}`, {
         method: 'DELETE',
@@ -292,8 +295,66 @@ const criarBotao = (titulo, acao) => {
     return botao;
 };
 
+const download = () => {
+    const dados = pesquisarLista((resp) => {
+        const filesql = window.URL.createObjectURL(new Blob([JSON.stringify(resp)], {type: 'application/json'}));
+        const a = document.createElement('a');
+        a.href = filesql;
+        a.download = `backup.json`;
+        a.target = '_blank';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    });
+};
+
+const pesquisarLista = (call) => {
+    showLoader();
+    const req = new Request('registro', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    fetch(req).then((resp) => {
+        resp.json().then(d => {
+            call(d);
+            hideLoader();
+        }).catch((e) => {
+            error(e);
+            hideLoader();
+        });
+    }).catch((e) => {
+        error(e);
+        hideLoader();
+    });
+};
 
 
+const limpar = () => {
+    let s = `form[data-form='create']`;
+    const form = document.querySelector(s);
+    for (let i = 0; i < form.length; i++) {
+        const input = form[i];
+        input.value = "";
+    }
+};
+
+const upload = (e) => {
+    showLoader();
+    if (e.target.files && e.target.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const data = event.target.result;
+            const registros = JSON.parse(data);
+            registros.forEach(r => {
+                save(r);
+            });
+        };
+        reader.readAsText(e.target.files[0]);
+    }
+};
 
 init();
 

@@ -36,13 +36,13 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md">
-                                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                    <button type="button" class="btn btn-outline-primary" data-action="novo" data-bs-toggle="modal"
                                             data-bs-target="#exampleModal"
                                             data-bs-backdrop="static">Novo</button>
                                     <button class="btn btn-outline-primary" data-action="lista" type="button">Atualizar</button>
 
                                     <button class="btn btn-outline-primary" data-action="download" type="button">Download backup</button>
-                                    <button class="btn btn-outline-primary" data-action="upload" type="button">Upload backup</button>
+                                    <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-backdrop="static" data-bs-target="#uploaderModal" data-action="upload" type="button">Upload backup</button>
                                 </div>
                             </div>
                         </div>
@@ -72,17 +72,18 @@
                         <form data-form="create">
                             <input class="form-control" type="hidden" name="id">
                             <div class="row">
-                                <div class="col-md-12">
-                                    <label>Título</label>
-                                    <input class="form-control" type="text" name="titulo">
+                                <div class="col-md-12 mb-2">
+                                    <label class="fw-bold">Título</label>
+                                    <input class="form-control" type="text" name="titulo" placeholder="Título do Evento">
                                 </div>
-                                <div class="col-md-12">
-                                    <label>Mensagem (Utilize '${}' para interpolar váriaveis pelo query string)</label>
-                                    <input class="form-control" type="text" name="mensagem">
+                                <div class="col-md-12 mb-2">
+                                    <label class="fw-bold">Mensagem </label>
+                                    <div class="text-muted fs-6">(Utilize '${}' para interpolar váriaveis pelo query string)</div>
+                                    <input class="form-control" type="text" name="mensagem" placeholder="Texto informado na mensagem">
                                 </div>
-                                <div class="col-md-12">
-                                    <label>URL</label>
-                                    <input class="form-control" type="url" name="url">
+                                <div class="col-md-12 mb-2">
+                                    <label class="fw-bold">URL</label>
+                                    <input class="form-control" type="url" name="url" placeholder="URL">
                                 </div>
                             </div>
                         </form>
@@ -111,6 +112,23 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-success" data-action="delete" data-form="delete">Confirmar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="uploaderModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="uploaderModal" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Upload</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input class="form-control" data-action="upload" type="file" name="file">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
             </div>
