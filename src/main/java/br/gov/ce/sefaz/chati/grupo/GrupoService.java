@@ -1,4 +1,4 @@
-package br.gov.ce.sefaz.tags;
+package br.gov.ce.sefaz.chati.grupo;
 
 import br.gov.ce.sefaz.chati.core.GenericService;
 import java.util.Objects;
@@ -11,16 +11,16 @@ import javax.inject.Inject;
  * @author gilmario
  */
 @ApplicationScoped
-public class TagService extends GenericService<String, Tag> {
+public class GrupoService extends GenericService<String, Grupo> {
 
     @Inject
-    DatabaseTagService databaseService;
+    DatabaseGrupoService databaseService;
 
     @Inject
-    NoDatabaseTagService noDatabaseService;
+    NoDatabaseGrupoService noDatabaseService;
 
     @Override
-    protected void validar(Tag registro) {
+    protected void validar(Grupo registro) {
         if (Objects.isNull(registro)) {
             throw new RuntimeException("Dados inválidos");
         }
@@ -31,18 +31,18 @@ public class TagService extends GenericService<String, Tag> {
     }
 
     @Override
-    protected Tag save(Tag registro) {
+    protected Grupo save(Grupo registro) throws Exception {
         registro.setId(UUID.randomUUID().toString());
         return super.save(registro);
     }
 
     @Override
-    protected DatabaseTagService getDatabaseService() {
+    protected DatabaseGrupoService getDatabaseService() {
         return this.databaseService;
     }
 
     @Override
-    protected NoDatabaseTagService getNoDatabaseService() {
+    protected NoDatabaseGrupoService getNoDatabaseService() {
         return this.noDatabaseService;
     }
 

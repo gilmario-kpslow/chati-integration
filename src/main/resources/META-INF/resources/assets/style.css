@@ -1,8 +1,4 @@
 /*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
-*/
-/*
     Created on : 8 de mai. de 2023, 21:42:13
     Author     : gilmario
 */
@@ -21,12 +17,9 @@ html, body, main{
 
 .loader {
     position: fixed;
-    width: 250px;
-    right: 0px;
-    top: 0px;
-    display: flex;
-    flex-direction: column;
     z-index: 9999;
+    right: 20px;
+    bottom: 20px;
 }
 
 .loader-content {
@@ -47,3 +40,6 @@ html, body, main{
     background-color: var(--bs-secondary-bg);
 }
 
+.hidden-seta-menu::before {
+    display: none !important;
+}

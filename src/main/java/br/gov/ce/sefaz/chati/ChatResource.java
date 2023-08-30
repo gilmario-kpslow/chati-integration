@@ -22,12 +22,12 @@ import javax.ws.rs.core.UriInfo;
 public class ChatResource {
 
     @Inject
-    private ChatService service;
+    ChatService service;
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response cadastro(ChatRegistro chat) {
+    public Response cadastro(ChatRegistro chat) throws Exception {
         chat = service.saveOrUpdate(chat);
         Response r = new Response();
         r.setResposta(chat.getId());
@@ -36,14 +36,14 @@ public class ChatResource {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public List<ChatRegistro> getLista() {
+    public List<ChatRegistro> getLista() throws Exception {
         return service.lista();
     }
 
     @GET
     @Path("getid/{chave}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public ChatRegistro getListaChat(@PathParam("chave") String chave) {
+    public ChatRegistro getListaChat(@PathParam("chave") String chave) throws Exception {
         return service.getByChave(chave);
     }
 
@@ -56,7 +56,7 @@ public class ChatResource {
 
     @GET
     @Path("executar/{chave}")
-    public void executar(@PathParam("chave") String chave, @Context UriInfo uriInfo) {
+    public void executar(@PathParam("chave") String chave, @Context UriInfo uriInfo) throws Exception {
         MultivaluedMap<String, String> values = uriInfo.getQueryParameters();
         service.execute(chave, values);
     }

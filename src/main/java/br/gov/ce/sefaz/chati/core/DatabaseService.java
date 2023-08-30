@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.gov.ce.sefaz.chati.core;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -23,10 +21,10 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 public abstract class DatabaseService<P extends Serializable, K extends Entity<P>> {
 
     @ConfigProperty(name = "databasename")
-    private String databaseName;
+    String databaseName;
 
     @Inject
-    private MongoClient mongoClient;
+    MongoClient mongoClient;
 
     private final String entityName;
 
@@ -38,7 +36,7 @@ public abstract class DatabaseService<P extends Serializable, K extends Entity<P
         return mongoClient.getDatabase(databaseName).getCollection(this.entityName);
     }
 
-    public List<K> lista() {
+    public List<K> lista() throws Exception {
         List<K> lista = new ArrayList<>();
         try (MongoCursor<Document> cursor = getCollection().find().iterator()) {
             while (cursor.hasNext()) {
@@ -48,21 +46,43 @@ public abstract class DatabaseService<P extends Serializable, K extends Entity<P
         return lista;
     }
 
-    public K save(K registro) {
+    public K save(K registro) throws Exception {
         Document document = from(registro);
         getCollection().insertOne(document);
         return registro;
     }
 
-    public K update(K registro) {
+    public K update(K registro) throws Exception {
         Document document = from(registro);
         getCollection().replaceOne(new Document().append("id", registro.getId()), document);
         return registro;
     }
 
-    protected abstract K parse(Document document);
+    protected abstract Class<K> getEntityClass();
 
-    protected abstract Document from(K entity);
+    protected K parse(Document document) throws Exception {
+        K k = getEntityClass().getConstructor().newInstance();
+        Field[] fields = getEntityClass().getDeclaredFields();
+        for (Field field : fields) {
+
+            Method metodo = getEntityClass().getDeclaredMethod("set" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1), String.class);
+            metodo.invoke(k, document.get(field.getName()));
+
+        }
+        return k;
+    }
+
+    protected Document from(K entity) throws Exception {
+        Field[] fields = entity.getClass().getDeclaredFields();
+        Document document = new Document();
+
+        for (Field field : fields) {
+            Method metodo = getEntityClass().getDeclaredMethod("get" + field.getName().substring(0, 1).toUpperCase() + field.getName().substring(1));
+            document.append(field.getName(), metodo.invoke(entity));
+        }
+
+        return document;
+    }
 
     public void delete(P id) {
         getCollection().deleteOne(new Document("id", id));

@@ -31,12 +31,23 @@ public class ChatService extends GenericService<String, ChatRegistro> {
             throw new RuntimeException("Dados inválidos");
         }
 
+        if (Objects.nonNull(registro.getId()) && registro.getId().isBlank()) {
+            registro.setId(null);
+        }
+
         if (Objects.isNull(registro.getTitulo()) || registro.getTitulo().isBlank()) {
             throw new RuntimeException("Titulo inválidos");
         }
+
+        if (Objects.isNull(registro.getUrl())) {
+            throw new RuntimeException("Dados inválidos");
+        }
+        if (!registro.getUrl().toLowerCase().startsWith("https://")) {
+            throw new RuntimeException("A URL e deve iniciar com https://");
+        }
     }
 
-    public void execute(String chave, MultivaluedMap<String, String> values) {
+    public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
         ChatRegistro dto = getByChave(chave);
 
         String mesagem = dto.getMensagem();
@@ -52,12 +63,12 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     }
 
     @Override
-    protected ChatRegistro save(ChatRegistro registro) {
+    protected ChatRegistro save(ChatRegistro registro) throws Exception {
         registro.setId(UUID.randomUUID().toString());
         return super.save(registro);
     }
 
-    public ChatRegistro getByChave(String chave) {
+    public ChatRegistro getByChave(String chave) throws Exception {
         if (noDatabase) {
             return noDatabaseService.getByChave(chave);
         }

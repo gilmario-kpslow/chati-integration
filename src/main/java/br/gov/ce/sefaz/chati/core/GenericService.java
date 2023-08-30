@@ -24,7 +24,7 @@ public abstract class GenericService<P extends Serializable, K extends Entity<P>
 
     protected abstract NoDatabaseService< K, P> getNoDatabaseService();
 
-    public List<K> lista() {
+    public List<K> lista() throws Exception {
         if (noDatabase) {
             return getNoDatabaseService().lista();
         } else {
@@ -32,25 +32,33 @@ public abstract class GenericService<P extends Serializable, K extends Entity<P>
         }
     }
 
-    protected abstract void validar(K registro);
+    protected void validarSave(K registro) {
+    }
 
-    public K saveOrUpdate(K registro) {
+    protected void validarUpdate(K registro) {
+    }
+
+    protected void validar(K registro) {
+    }
+
+    public K saveOrUpdate(K registro) throws Exception {
+        this.validar(registro);
         if (Objects.isNull(registro.getId())) {
             return this.save(registro);
         }
         return this.update(registro);
     }
 
-    protected K save(K registro) {
-        validar(registro);
+    protected K save(K registro) throws Exception {
+        validarSave(registro);
         if (noDatabase) {
             return getNoDatabaseService().save(registro);
         }
         return getDatabaseService().save(registro);
     }
 
-    K update(K registro) {
-        validar(registro);
+    K update(K registro) throws Exception {
+        validarUpdate(registro);
         if (noDatabase) {
             return getNoDatabaseService().update(registro);
         }

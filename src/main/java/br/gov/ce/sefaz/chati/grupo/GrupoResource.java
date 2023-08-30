@@ -1,4 +1,4 @@
-package br.gov.ce.sefaz.tags;
+package br.gov.ce.sefaz.chati.grupo;
 
 import br.gov.ce.sefaz.chati.*;
 import java.util.List;
@@ -16,25 +16,25 @@ import javax.ws.rs.core.MediaType;
  *
  * @author gilmario
  */
-@Path("tag")
-public class TagResource {
+@Path("grupo")
+public class GrupoResource {
 
     @Inject
-    private TagService service;
+    GrupoService service;
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public Response cadastro(Tag chat) {
-        chat = service.saveOrUpdate(chat);
+    public Response cadastro(Grupo entity) throws Exception {
+        entity = service.saveOrUpdate(entity);
         Response r = new Response();
-        r.setResposta(chat.getId());
+        r.setResposta(entity.getId());
         return r;
     }
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public List<Tag> getLista() {
+    public List<Grupo> getLista() throws Exception {
         return service.lista();
     }
 

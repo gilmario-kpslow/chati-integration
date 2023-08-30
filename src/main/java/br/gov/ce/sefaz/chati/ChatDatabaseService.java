@@ -20,7 +20,7 @@ public class ChatDatabaseService extends DatabaseService<String, ChatRegistro> {
         super("chat-registro");
     }
 
-    public ChatRegistro getByChave(String chave) {
+    public ChatRegistro getByChave(String chave) throws Exception {
         ChatRegistro find = null;
         try (MongoCursor<Document> cursor = getCollection().find(new Document().append("id", chave)).iterator()) {
             if (cursor.hasNext()) {
@@ -30,24 +30,28 @@ public class ChatDatabaseService extends DatabaseService<String, ChatRegistro> {
         return find;
     }
 
+//    @Override
+//    public ChatRegistro parse(Document document, ChatRegistro chat) {
+//        ChatRegistro registro = new ChatRegistro();
+//        registro.setTitulo(document.getString("titulo"));
+//        registro.setMensagem(document.getString("mensagem"));
+//        registro.setId(document.getString("id"));
+//        registro.setUrl(document.getString("url"));
+//        registro.setCor(document.getString("cor"));
+//        return registro;
+//    }
+//    @Override
+//    protected Document from(ChatRegistro entity) {
+//        Document document = new Document()
+//                .append("titulo", entity.getTitulo())
+//                .append("mensagem", entity.getMensagem())
+//                .append("id", entity.getId())
+//                .append("url", entity.getUrl())
+//                .append("cor", entity.getCor());
+//        return document;
+//    }
     @Override
-    public ChatRegistro parse(Document document) {
-        ChatRegistro registro = new ChatRegistro();
-        registro.setTitulo(document.getString("titulo"));
-        registro.setMensagem(document.getString("mensagem"));
-        registro.setId(document.getString("id"));
-        registro.setUrl(document.getString("url"));
-        return registro;
+    protected Class<ChatRegistro> getEntityClass() {
+        return ChatRegistro.class;
     }
-
-    @Override
-    protected Document from(ChatRegistro entity) {
-        Document document = new Document()
-                .append("titulo", entity.getTitulo())
-                .append("mensagem", entity.getMensagem())
-                .append("id", entity.getId())
-                .append("url", entity.getUrl());
-        return document;
-    }
-
 }
