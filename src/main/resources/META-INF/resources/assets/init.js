@@ -86,13 +86,13 @@ const messagem = (titulo, messagem, tipo = 'SUCCESS') => {
     m.appendChild(detalhe);
     const contem = document.getElementById('messagem');
     contem.appendChild(m);
-    limparMessagem();
+    limparMessagem(2000, m);
 };
 
-const limparMessagem = (time) => {
+const limparMessagem = (time, mensagem) => {
     setTimeout(() => {
         const contem = document.getElementById('messagem');
-        contem.innerHTML = '';
+        contem.removeChild(mensagem);
     }, time || 2000);
 };
 
@@ -386,7 +386,7 @@ const criarLista = (lista) => {
 
 
         const params = parametros(a.mensagem);
-        const url = `${location.href}/registro/executar/${a.id}${params}`;
+        const url = `${location.href}registro/executar/${a.id}${params}`;
         input.value = url;
         input.setAttribute('title', 'Click para copiar a URL');
         input.addEventListener('click', () => {
@@ -405,7 +405,7 @@ const criarLista = (lista) => {
 
 const copy = (text) => {
     if ('clipboard' in navigator) {
-        return navigator.clipboard.writeText(text);
+        return navigator.clipboard.writeText(text).then();
     }
 };
 
