@@ -30,26 +30,6 @@ public class ChatDatabaseService extends DatabaseService<String, ChatRegistro> {
         return find;
     }
 
-//    @Override
-//    public ChatRegistro parse(Document document, ChatRegistro chat) {
-//        ChatRegistro registro = new ChatRegistro();
-//        registro.setTitulo(document.getString("titulo"));
-//        registro.setMensagem(document.getString("mensagem"));
-//        registro.setId(document.getString("id"));
-//        registro.setUrl(document.getString("url"));
-//        registro.setCor(document.getString("cor"));
-//        return registro;
-//    }
-//    @Override
-//    protected Document from(ChatRegistro entity) {
-//        Document document = new Document()
-//                .append("titulo", entity.getTitulo())
-//                .append("mensagem", entity.getMensagem())
-//                .append("id", entity.getId())
-//                .append("url", entity.getUrl())
-//                .append("cor", entity.getCor());
-//        return document;
-//    }
     @Override
     protected Class<ChatRegistro> getEntityClass() {
         return ChatRegistro.class;

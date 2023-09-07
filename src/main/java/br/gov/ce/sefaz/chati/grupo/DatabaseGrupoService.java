@@ -14,23 +14,6 @@ public class DatabaseGrupoService extends DatabaseService<String, Grupo> {
         super("grupo");
     }
 
-//    @Override
-//    public Grupo parse(Document document) {
-//        Grupo registro = new Grupo();
-//        registro.setCor(document.getString("cor"));
-//        registro.setId(document.getString("id"));
-//        registro.setNome(document.getString("nome"));
-//        return registro;
-//    }
-//
-//    @Override
-//    protected Document from(Grupo entity) {
-//        Document document = new Document()
-//                .append("id", entity.getId())
-//                .append("nome", entity.getNome())
-//                .append("cor", entity.getCor());
-//        return document;
-//    }
     @Override
     protected Class<Grupo> getEntityClass() {
         return Grupo.class;
