@@ -1,9 +1,13 @@
-import { StarLoad }
-from './star-load.js';
+import { StarLoad } from './star-load.js';
+import { Socket } from './websocket.js';
 
 const star = new StarLoad();
 
 let listaChats = [];
+
+let logado = false;
+
+let socket;
 
 const limpar = () => {
     let s = `form[data-form='create']`;
@@ -87,6 +91,8 @@ const messagem = (titulo, messagem, tipo = 'SUCCESS') => {
     const contem = document.getElementById('messagem');
     contem.appendChild(m);
     limparMessagem(2000, m);
+
+    notificar(titulo, messagem);
 };
 
 const limparMessagem = (time, mensagem) => {
@@ -135,6 +141,15 @@ const init = () => {
             case 'filtroClear':
                 form.onclick = filtrarClear;
                 break;
+            case 'backup':
+                form.onclick = backupDriver;
+                break;
+            case 'restore':
+                form.onclick = logout;
+                break;
+            case 'notifica':
+                form.onclick = notifyMe;
+                break;
             default :
                 ;
         }
@@ -147,7 +162,19 @@ const init = () => {
 
     lista();
 
+    socket = new Socket();
+    socket.connect('gilmario', (a) => {
+        console.log(a);
+    }, (m) => {
+        console.log(m)
+        messagem("Ops!", m.data, 'info');
+    }, (e) => messagem("", e, 'error'));
 
+
+};
+
+const restore = () => {
+    console.log('OK');
 };
 
 const createObjectFrom = (form) => {
@@ -583,8 +610,123 @@ const loadTags = (app) => {
     });
 };
 
+const CLIENT_ID = '854943276192-0gqij6j7eilrldgvgfsuneirc34n6c9h.apps.googleusercontent.com';
+const API_KEY = 'AIzaSyA6f6OXpLX-aozy8PnyDzrX68CsGdlQxIQ';
+
+const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+
+const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
+
+let token;
+
+const loadApi = () => {
+    gapi.load('client', initializeGapiClient);
+    token = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPES,
+        callback: ''
+    });
+};
+
+const initializeGapiClient = async () => {
+    await gapi.client.init({
+        apiKey: API_KEY,
+        discoveryDocs: [DISCOVERY_DOC]
+    });
+};
+
+const login = () => {
+    token.callback = async (resp) => {
+        if (resp.error !== undefined) {
+            throw (resp);
+        }
+
+        logado = true;
+    };
+
+    if (gapi.client.getToken() === null) {
+        token.requestAccessToken({prompt: 'consent'});
+    } else {
+        token.requestAccessToken({prompt: ''});
+    }
+};
+
+const logout = () => {
+    const token = gapi.client.getToken();
+    if (token !== null) {
+        google.accounts.oauth2.revoke(token.access_token);
+        gapi.client.setToken('');
+    }
+};
+
+const listFiles = async () => {
+    let response;
+    try {
+        response = await gapi.client.drive.files.list({
+            'pageSize': 10,
+            'fields': 'files(id, name)'
+        });
+    } catch (err) {
+        return;
+    }
+    const files = response.result.files;
+    if (!files || files.length == 0) {
+        return;
+    }
+
+    return files;
+};
+
+const backupDriver = async () => {
+    const token = gapi.client.getToken();
+    console.log(token);
+    if (!token) {
+        await login();
+    }
+    console.log('LOGADO', token);
+
+    const lista = await listFiles();
+    console.log(lista);
+};
+
+
 try {
     init();
+    loadApi();
 } catch (e) {
     console.log(e);
 }
+
+function notifyMe() {
+    // Verifica se o browser suporta notificações
+    if (!("Notification" in window)) {
+        alert("Este browser não suporta notificações de Desktop");
+    }
+
+    // Let's check whether notification permissions have already been granted
+    else if (Notification.permission === "granted") {
+        // If it's okay let's create a notification
+        var notification = new Notification("Hi there!");
+    }
+
+    // Otherwise, we need to ask the user for permission
+    else if (Notification.permission !== "denied") {
+        Notification.requestPermission(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                var notification = new Notification("Hi there!");
+            }
+        });
+    }
+
+}
+
+
+const notificar = (titulo, mensagem) => {
+    const img = "assets/logo.svg";
+    if (Notification.permission === "granted") {
+        new Notification(titulo, {body: mensagem, icon: img});
+    }
+};
+
+

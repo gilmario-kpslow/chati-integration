@@ -1,6 +1,7 @@
 package br.gov.ce.sefaz.chati;
 
 import br.gov.ce.sefaz.chati.core.GenericService;
+import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -24,6 +25,9 @@ public class ChatService extends GenericService<String, ChatRegistro> {
 
     @Inject
     ChatExecutor executor;
+
+    @Inject
+    ChatSocket chatSocket;
 
     @Override
     protected void validar(ChatRegistro registro) {
@@ -50,6 +54,8 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
         ChatRegistro dto = getByChave(chave);
 
+        chatSocket.broadcast("Executando notificação!" + dto.getTitulo());
+
         String mesagem = dto.getMensagem();
         if (Objects.nonNull(values)) {
             for (Map.Entry<String, List<String>> entry : values.entrySet()) {
@@ -64,6 +70,7 @@ public class ChatService extends GenericService<String, ChatRegistro> {
 
     @Override
     protected ChatRegistro save(ChatRegistro registro) throws Exception {
+        chatSocket.broadcast("Registro Salvo!");
         registro.setId(UUID.randomUUID().toString());
         return super.save(registro);
     }
