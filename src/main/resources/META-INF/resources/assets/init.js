@@ -1,5 +1,6 @@
 import { StarLoad } from './star-load.js';
 import { Socket } from './websocket.js';
+import { habilitarNotificacoes, notificar } from './notifica.js';
 
 const star = new StarLoad();
 
@@ -102,11 +103,86 @@ const limparMessagem = (time, mensagem) => {
     }, time || 2000);
 };
 
+const criarAcoes = () => {
+    const menu = document.getElementById('acoes');
+    const mapNovo = new Map();
+    mapNovo.set('data-bs-toggle', 'modal');
+    mapNovo.set('data-bs-target', '#exampleModal');
+    mapNovo.set('data-bs-backdrop', 'static');
+
+    const mapUp = new Map();
+    mapUp.set('data-bs-toggle', 'modal');
+    mapUp.set('data-bs-target', '#uploaderModal');
+    mapUp.set('data-bs-backdrop', 'static');
+
+    const cl = ['btn', 'btn-outline-primary', 'dropdown-item'];
+
+    const novoItem = criarItem(mapNovo, cl, 'Novo', novo);
+
+    const listaItem = criarItem(null, cl, 'Atualizar', lista);
+
+    const downloadItem = criarItem(null, cl, 'Donwload Backup', download);
+
+    const uploadItem = criarItem(mapUp, cl, 'Upload Backup', null);
+
+    const notificaItem = criarItem(null, cl, 'Notificar', habilitarNotificacoes);
+
+    menu.appendChild(novoItem);
+    menu.appendChild(listaItem);
+    menu.appendChild(downloadItem);
+    menu.appendChild(uploadItem);
+    menu.appendChild(notificaItem);
+};
+
+const criarItem = (att, cl, name, call) => {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    button.setAttribute('type', 'button');
+    li.appendChild(button);
+
+    if (att) {
+        att.forEach((k, v) => {
+            console.log(k, v);
+            button.setAttribute(v, k);
+        });
+    }
+
+    if (cl) {
+        cl.forEach((k) => {
+            button.classList.add(k);
+        });
+    }
+
+    button.textContent = name;
+    button.addEventListener('click', call);
+
+    return li;
+};
+
+const initUpload = () => {
+    const up = document.querySelector("input[data-action='upload']");
+    up.addEventListener('input', upload);
+    const filtro = document.getElementById('filtro');
+    filtro.addEventListener('keyup', filtrar);
+};
+
+const initWebSocket = () => {
+    socket = new Socket();
+    socket.connect('gilmario', (a) => {
+        console.log(a);
+    }, (m) => {
+        console.log(m);
+        messagem("Ops!", m.data, 'info');
+    }, (e) => messagem("Error", e, 'error'));
+};
+
 const init = () => {
 
-//    console.log('init');
     const loader = document.getElementById('loader');
     star.init(loader);
+    initUpload();
+    lista();
+
     const forms = document.getElementsByTagName("button");
     for (let i = 0; i < forms.length; i++) {
         const form = forms.item(i);
@@ -126,55 +202,16 @@ const init = () => {
             case 'delete':
                 form.onclick = deletar;
                 break;
-            case 'lista':
-                form.onclick = lista;
-                break;
-            case 'download':
-                form.onclick = download;
-                break;
-            case 'novo':
-                form.onclick = novo;
-                break;
-            case 'upload':
-                form.onclick = upload;
-                break;
             case 'filtroClear':
                 form.onclick = filtrarClear;
-                break;
-            case 'backup':
-                form.onclick = backupDriver;
-                break;
-            case 'restore':
-                form.onclick = logout;
-                break;
-            case 'notifica':
-                form.onclick = notifyMe;
                 break;
             default :
                 ;
         }
     }
 
-    const up = document.querySelector("input[data-action='upload']");
-    up.addEventListener('input', upload);
-    const filtro = document.getElementById('filtro');
-    filtro.addEventListener('keyup', filtrar);
-
-    lista();
-
-    socket = new Socket();
-    socket.connect('gilmario', (a) => {
-        console.log(a);
-    }, (m) => {
-        console.log(m)
-        messagem("Ops!", m.data, 'info');
-    }, (e) => messagem("", e, 'error'));
-
-
-};
-
-const restore = () => {
-    console.log('OK');
+    criarAcoes();
+    initWebSocket();
 };
 
 const createObjectFrom = (form) => {
@@ -543,7 +580,8 @@ const download = () => {
         const filesql = window.URL.createObjectURL(new Blob([JSON.stringify(resp)], {type: 'application/json'}));
         const a = document.createElement('a');
         a.href = filesql;
-        a.download = `backup.json`;
+        const date = new Date();
+        a.download = `chatbackup-backup-${location.hostname}-${date.getFullYear()}${date.getMonth()}${date.getDate()}-${date.getHours()}${date.getMinutes()}${date.getSeconds()}.json`;
         a.target = '_blank';
         document.body.appendChild(a);
         a.click();
@@ -579,9 +617,31 @@ const upload = (e) => {
         const reader = new FileReader();
         reader.onload = (event) => {
             const data = event.target.result;
-            const registros = JSON.parse(data);
-            registros.forEach(r => {
-                save(r);
+            console.log(data);
+            const req = new Request('registro/restore', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: data
+            });
+            fetch(req).then((resp) => {
+                if (resp.status > 299) {
+                    resp.json().then(d => {
+                        error(d.messagem);
+                    });
+                    return;
+                }
+
+                lista();
+                hideModal();
+                messagem("Sucesso!", "Backup restaurado!", 'success');
+                hideLoader();
+
+            }
+            ).catch((e) => {
+                error(e);
+                hideLoader();
             });
         };
         reader.readAsText(e.target.files[0]);
@@ -610,123 +670,10 @@ const loadTags = (app) => {
     });
 };
 
-const CLIENT_ID = '854943276192-0gqij6j7eilrldgvgfsuneirc34n6c9h.apps.googleusercontent.com';
-const API_KEY = 'AIzaSyA6f6OXpLX-aozy8PnyDzrX68CsGdlQxIQ';
-
-const DISCOVERY_DOC = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
-
-const SCOPES = 'https://www.googleapis.com/auth/drive.metadata.readonly';
-
-let token;
-
-const loadApi = () => {
-    gapi.load('client', initializeGapiClient);
-    token = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPES,
-        callback: ''
-    });
-};
-
-const initializeGapiClient = async () => {
-    await gapi.client.init({
-        apiKey: API_KEY,
-        discoveryDocs: [DISCOVERY_DOC]
-    });
-};
-
-const login = () => {
-    token.callback = async (resp) => {
-        if (resp.error !== undefined) {
-            throw (resp);
-        }
-
-        logado = true;
-    };
-
-    if (gapi.client.getToken() === null) {
-        token.requestAccessToken({prompt: 'consent'});
-    } else {
-        token.requestAccessToken({prompt: ''});
-    }
-};
-
-const logout = () => {
-    const token = gapi.client.getToken();
-    if (token !== null) {
-        google.accounts.oauth2.revoke(token.access_token);
-        gapi.client.setToken('');
-    }
-};
-
-const listFiles = async () => {
-    let response;
-    try {
-        response = await gapi.client.drive.files.list({
-            'pageSize': 10,
-            'fields': 'files(id, name)'
-        });
-    } catch (err) {
-        return;
-    }
-    const files = response.result.files;
-    if (!files || files.length == 0) {
-        return;
-    }
-
-    return files;
-};
-
-const backupDriver = async () => {
-    const token = gapi.client.getToken();
-    console.log(token);
-    if (!token) {
-        await login();
-    }
-    console.log('LOGADO', token);
-
-    const lista = await listFiles();
-    console.log(lista);
-};
-
 
 try {
     init();
-    loadApi();
 } catch (e) {
     console.log(e);
 }
-
-function notifyMe() {
-    // Verifica se o browser suporta notificações
-    if (!("Notification" in window)) {
-        alert("Este browser não suporta notificações de Desktop");
-    }
-
-    // Let's check whether notification permissions have already been granted
-    else if (Notification.permission === "granted") {
-        // If it's okay let's create a notification
-        var notification = new Notification("Hi there!");
-    }
-
-    // Otherwise, we need to ask the user for permission
-    else if (Notification.permission !== "denied") {
-        Notification.requestPermission(function (permission) {
-            // If the user accepts, let's create a notification
-            if (permission === "granted") {
-                var notification = new Notification("Hi there!");
-            }
-        });
-    }
-
-}
-
-
-const notificar = (titulo, mensagem) => {
-    const img = "assets/logo.svg";
-    if (Notification.permission === "granted") {
-        new Notification(titulo, {body: mensagem, icon: img});
-    }
-};
-
 

@@ -3,7 +3,8 @@ export class Socket {
     socket;
 
     connect(nome, open, messagem, error, close) {
-        this.socket = new WebSocket("ws://" + location.host + "/chat/" + nome);
+        const prot = location.protocol === 'http:' ? 'ws:' : 'wss:';
+        this.socket = new WebSocket(`${prot}//${location.host}/chat/${nome}`);
         this.socket.onopen = open;
         this.socket.onmessage = messagem;
         this.socket.onerror = error;

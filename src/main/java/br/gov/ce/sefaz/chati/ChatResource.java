@@ -60,4 +60,12 @@ public class ChatResource {
         MultivaluedMap<String, String> values = uriInfo.getQueryParameters();
         service.execute(chave, values);
     }
+
+    @POST
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("restore")
+    public void restore(List<ChatRegistro> lista) throws Exception {
+        service.restoreBackup(lista);
+    }
 }

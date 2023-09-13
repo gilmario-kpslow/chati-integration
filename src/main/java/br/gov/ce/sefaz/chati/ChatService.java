@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.MultivaluedMap;
@@ -72,6 +74,10 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     protected ChatRegistro save(ChatRegistro registro) throws Exception {
         chatSocket.broadcast("Registro Salvo!");
         registro.setId(UUID.randomUUID().toString());
+        if (Objects.isNull(registro.getCor())) {
+            registro.setCor("#003399");
+        }
+
         return super.save(registro);
     }
 
@@ -90,6 +96,16 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     @Override
     protected NoDatabaseChatRegistroService getNoDatabaseService() {
         return this.noDatabaseService;
+    }
+
+    public void restoreBackup(List<ChatRegistro> lista) {
+        lista.stream().forEach(registro -> {
+            try {
+                this.save(registro);
+            } catch (Exception ex) {
+                Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
     }
 
 }
