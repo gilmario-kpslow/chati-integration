@@ -101,7 +101,7 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     public void restoreBackup(List<ChatRegistro> lista) {
         lista.stream().forEach(registro -> {
             try {
-                this.save(registro);
+                super.save(registro);
             } catch (Exception ex) {
                 Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
             }
