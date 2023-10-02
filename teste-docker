@@ -1,5 +1,9 @@
 #!/bin/bash
 docker run -d --rm --network local \
     -e DB_URL=mongodb://root:root@mongodb:27017 \
+    -e NO_DB=false \
+    -e DB_NAME:chati \
+    -e RESTORE_ON_START="" \
+    -e FILE_STORE_PATH=/home/gilmario/chati \
     -p 8080:8080 \
     chat-integracao:latest

@@ -11,7 +11,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@EqualsAndHashCode()
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class ChatRegistro extends Entity<String> {
 
     private String titulo;

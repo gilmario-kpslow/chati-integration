@@ -3,9 +3,9 @@ package br.gov.ce.sefaz.chati;
 import br.gov.ce.sefaz.chati.executor.GoogleChatServiceInterface;
 import br.gov.ce.sefaz.chati.executor.GoogleChatServiceOption;
 import br.gov.ce.sefaz.chati.executor.GoogleMensagemDTO;
+import jakarta.enterprise.context.ApplicationScoped;
 import java.net.URI;
 import java.util.Optional;
-import javax.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.rest.client.RestClientBuilder;
 

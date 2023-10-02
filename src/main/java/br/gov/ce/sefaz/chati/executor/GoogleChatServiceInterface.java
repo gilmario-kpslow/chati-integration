@@ -1,7 +1,7 @@
 package br.gov.ce.sefaz.chati.executor;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
 
 /**
  *

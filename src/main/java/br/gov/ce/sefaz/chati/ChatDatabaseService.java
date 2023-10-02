@@ -1,12 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.gov.ce.sefaz.chati;
 
 import br.gov.ce.sefaz.chati.core.DatabaseService;
 import com.mongodb.client.MongoCursor;
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 import org.bson.Document;
 
 /**

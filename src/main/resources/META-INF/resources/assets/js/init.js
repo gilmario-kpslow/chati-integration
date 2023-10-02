@@ -181,8 +181,6 @@ const init = () => {
     const loader = document.getElementById('loader');
     star.init(loader);
     initUpload();
-    lista();
-
     const forms = document.getElementsByTagName("button");
     for (let i = 0; i < forms.length; i++) {
         const form = forms.item(i);
@@ -212,6 +210,13 @@ const init = () => {
 
     criarAcoes();
     initWebSocket();
+
+    getVersao((data) => {
+        lista();
+        const ele = document.getElementById("versao");
+        const versao = JSON.parse(data);
+        ele.textContent = `${versao.projeto}: ${versao.versao} - ${versao.data}`;
+    });
 };
 
 const createObjectFrom = (form) => {
@@ -592,6 +597,28 @@ const download = () => {
 const pesquisarLista = (call) => {
     showLoader();
     const req = new Request('registro', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+    fetch(req).then((resp) => {
+        resp.json().then(d => {
+            call(d);
+            hideLoader();
+        }).catch((e) => {
+            error(e);
+            hideLoader();
+        });
+    }).catch((e) => {
+        error(e);
+        hideLoader();
+    });
+};
+
+const getVersao = (call) => {
+    showLoader();
+    const req = new Request('versao', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'

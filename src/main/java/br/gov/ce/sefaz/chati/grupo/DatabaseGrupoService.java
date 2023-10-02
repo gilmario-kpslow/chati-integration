@@ -1,7 +1,7 @@
 package br.gov.ce.sefaz.chati.grupo;
 
 import br.gov.ce.sefaz.chati.core.DatabaseService;
-import javax.enterprise.context.Dependent;
+import jakarta.enterprise.context.Dependent;
 
 /**
  *

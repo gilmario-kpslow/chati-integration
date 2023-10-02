@@ -2,15 +2,15 @@ package br.gov.ce.sefaz.chati;
 
 import br.gov.ce.sefaz.chati.core.GenericService;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.core.MultivaluedMap;
 
 /**
  *

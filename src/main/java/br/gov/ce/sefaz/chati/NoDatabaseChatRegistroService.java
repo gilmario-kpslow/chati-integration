@@ -1,7 +1,7 @@
 package br.gov.ce.sefaz.chati;
 
 import br.gov.ce.sefaz.chati.core.NoDatabaseService;
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 /**
  *

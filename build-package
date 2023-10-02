@@ -1,2 +1,2 @@
 #!/bin/bash
-./mvnw clean package -Pnative
+./mvnw clean package

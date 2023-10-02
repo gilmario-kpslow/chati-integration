@@ -1,13 +1,21 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package br.gov.ce.sefaz.chati.versao;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
  * @author gilmario
  */
+@Getter
+@Setter
+@Builder
 public class Versao {
+
+    private String versao;
+    private String data;
+//    private String hora;
+    private String projeto;
 
 }

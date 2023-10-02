@@ -1,10 +1,10 @@
 package br.gov.ce.sefaz.chati.grupo;
 
 import br.gov.ce.sefaz.chati.core.GenericService;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import java.util.Objects;
 import java.util.UUID;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 
 /**
  *

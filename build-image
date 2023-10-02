@@ -1,8 +1,8 @@
 #!/bin/bash
-docker build -f src/main/docker/Dockerfile.native -t chat-integracao:$1 .
+docker build -f src/main/docker/Dockerfile.jvm -t chat-integracao:$1 .
 
-docker build -f src/main/docker/Dockerfile.native -t chat-integracao:latest .
+docker build -f src/main/docker/Dockerfile.jvm -t chat-integracao:latest .
 
-docker build -f src/main/docker/Dockerfile.native -t registry.truesystem.com.br/chat-integracao:$1 .
+docker build -f src/main/docker/Dockerfile.jvm -t registry.truesystem.com.br/chat-integracao:$1 .
 
-docker build -f src/main/docker/Dockerfile.native -t registry.truesystem.com.br/chat-integracao:latest .
+docker build -f src/main/docker/Dockerfile.jvm -t registry.truesystem.com.br/chat-integracao:latest .
