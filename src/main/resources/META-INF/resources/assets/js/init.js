@@ -214,8 +214,9 @@ const init = () => {
     getVersao((data) => {
         lista();
         const ele = document.getElementById("versao");
-        const versao = JSON.parse(data);
-        ele.textContent = `${versao.projeto}: ${versao.versao} - ${versao.data}`;
+        console.log(data);
+
+        ele.textContent = `${data.projeto}: ${data.versao} - ${data.data}`;
     });
 };
 

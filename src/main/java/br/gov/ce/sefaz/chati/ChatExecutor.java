@@ -1,8 +1,8 @@
 package br.gov.ce.sefaz.chati;
 
-import br.gov.ce.sefaz.chati.executor.GoogleChatServiceInterface;
-import br.gov.ce.sefaz.chati.executor.GoogleChatServiceOption;
-import br.gov.ce.sefaz.chati.executor.GoogleMensagemDTO;
+import br.gov.ce.sefaz.chati.executor.google.GoogleChatServiceInterface;
+import br.gov.ce.sefaz.chati.executor.google.GoogleChatServiceOption;
+import br.gov.ce.sefaz.chati.executor.google.GoogleMensagemDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import java.net.URI;
 import java.util.Optional;

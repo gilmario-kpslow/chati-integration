@@ -55,18 +55,8 @@ public class ChatService extends GenericService<String, ChatRegistro> {
 
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
         ChatRegistro dto = getByChave(chave);
-
+        String mesagem = this.convertMessage(dto.getMensagem(), values);
         chatSocket.broadcast("Executando notificação!" + dto.getTitulo());
-
-        String mesagem = dto.getMensagem();
-        if (Objects.nonNull(values)) {
-            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
-                String key = entry.getKey();
-                List<String> value = entry.getValue();
-                mesagem = mesagem.replaceAll("\\$\\{" + key + "\\}", value.get(0));
-            }
-        }
-        System.out.println(mesagem);
         executor.executar(dto.getUrl(), mesagem);
     }
 
@@ -106,6 +96,25 @@ public class ChatService extends GenericService<String, ChatRegistro> {
                 Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
+    }
+
+    public void notificar(String chave, MultivaluedMap<String, String> values) throws Exception {
+        ChatRegistro dto = getByChave(chave);
+        String mesagem = this.convertMessage(dto.getMensagem(), values);
+        chatSocket.broadcast(mesagem);
+    }
+
+    private String convertMessage(String mensagem, MultivaluedMap<String, String> values) {
+        String novaMesagem = mensagem;
+        if (Objects.nonNull(values)) {
+            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
+                String key = entry.getKey();
+                List<String> value = entry.getValue();
+                novaMesagem = novaMesagem.replaceAll("\\$\\{" + key + "\\}", value.get(0));
+            }
+        }
+
+        return novaMesagem;
     }
 
 }

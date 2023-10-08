@@ -32,6 +32,7 @@ public class FileService {
                 String json = JsonConverter.toJson(lista);
                 String fileName = new StringBuilder("chati").append(LocalDateTime.now().format(DEFAULT_FORMATER)).toString();
                 Files.write(Paths.get(value, fileName), json.getBytes());
+                Files.write(Paths.get(value, "last-backup.json"), json.getBytes());
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
@@ -39,6 +40,13 @@ public class FileService {
     }
 
     List<String> list() throws IOException {
+        if (fileStorePath.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return Files.list(Paths.get(fileStorePath.get())).map(p -> p.toString()).toList();
+    }
+
+    List<String> ultimoBackup() throws IOException {
         if (fileStorePath.isEmpty()) {
             return Collections.emptyList();
         }

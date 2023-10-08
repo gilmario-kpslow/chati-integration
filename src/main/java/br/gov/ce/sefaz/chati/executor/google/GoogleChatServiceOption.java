@@ -1,4 +1,4 @@
-package br.gov.ce.sefaz.chati.executor;
+package br.gov.ce.sefaz.chati.executor.google;
 
 import io.vertx.core.http.HttpClientOptions;
 import jakarta.ws.rs.ext.ContextResolver;
