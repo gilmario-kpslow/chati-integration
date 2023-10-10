@@ -46,11 +46,15 @@ public class FileService {
         return Files.list(Paths.get(fileStorePath.get())).map(p -> p.toString()).toList();
     }
 
-    List<String> ultimoBackup() throws IOException {
+    String ultimoBackup() throws IOException {
         if (fileStorePath.isEmpty()) {
-            return Collections.emptyList();
+            return null;
         }
-        return Files.list(Paths.get(fileStorePath.get())).map(p -> p.toString()).toList();
+        return Files.readAllLines(Paths.get(fileStorePath.get()))
+                .stream()
+                .map(a -> new StringBuilder(a))
+                .reduce((a, b) -> a.append(b))
+                .get().toString();
     }
 
 }

@@ -19,8 +19,14 @@ public class FileServerResource {
     private FileService service;
 
     @GET
+    @Path("list")
     public List<String> listarBakups() throws IOException {
         return service.list();
+    }
+
+    @GET
+    public String getUltimoBackup() throws IOException {
+        return service.ultimoBackup();
     }
 
     @POST
