@@ -1,4 +1,4 @@
-package br.gov.ce.sefaz.chati;
+package br.gov.ce.sefaz.chati.executor.google;
 
 import br.gov.ce.sefaz.chati.executor.google.GoogleChatServiceInterface;
 import br.gov.ce.sefaz.chati.executor.google.GoogleChatServiceOption;
@@ -14,7 +14,7 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
  * @author gilmario
  */
 @ApplicationScoped
-public class ChatExecutor {
+public class GoogleExecutor {
 
     @ConfigProperty(name = "proxy.host")
     Optional<String> proxyHost;

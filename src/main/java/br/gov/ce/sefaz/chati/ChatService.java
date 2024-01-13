@@ -1,5 +1,6 @@
 package br.gov.ce.sefaz.chati;
 
+import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
 import br.gov.ce.sefaz.chati.core.GenericService;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -26,7 +27,7 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     NoDatabaseChatRegistroService noDatabaseService;
 
     @Inject
-    ChatExecutor executor;
+    GoogleExecutor executor;
 
     @Inject
     ChatSocket chatSocket;

@@ -177,64 +177,7 @@ const initWebSocket = () => {
     }, (e) => messagem("Error", e, 'error'));
 };
 
-const init = () => {
 
-    const loader = document.getElementById('loader');
-    star.init(loader);
-    initUpload();
-    const forms = document.getElementsByTagName("button");
-    for (let i = 0; i < forms.length; i++) {
-        const form = forms.item(i);
-        const attribute = form.attributes['data-action'];
-        if (!attribute) {
-            continue;
-        }
-        const acao = attribute.nodeValue;
-        if (!acao) {
-            continue;
-        }
-
-        switch (acao) {
-            case 'create':
-                form.onclick = create;
-                break;
-            case 'delete':
-                form.onclick = deletar;
-                break;
-            case 'filtroClear':
-                form.onclick = filtrarClear;
-                break;
-            default :
-                ;
-        }
-    }
-
-    criarAcoes();
-    initWebSocket();
-
-    getVersao((data) => {
-        lista();
-        const ele = document.getElementById("versao");
-        console.log(data);
-
-        ele.textContent = `${data.projeto}: ${data.versao} - ${data.data}`;
-    });
-
-    const div = document.createElement("div");
-    div.textContent = "FOOTER";
-
-    const divh = document.createElement("div");
-    divh.textContent = "HEADER";
-
-    const corpo = document.createElement("div");
-    corpo.textContent = "CORPO";
-
-    const modal = new Modal('teste');
-    const modal_ = modal.create(divh, corpo, div);
-    document.body.appendChild(modal_);
-
-    modal.show();
-};
 
 const createObjectFrom = (form) => {
     const obj = {};
@@ -712,6 +655,67 @@ const loadTags = (app) => {
         error(e);
         hideLoader();
     });
+};
+
+const init = () => {
+
+    const loader = document.getElementById('loader');
+    star.init(loader);
+    initUpload();
+    const forms = document.getElementsByTagName("button");
+    for (let i = 0; i < forms.length; i++) {
+        const form = forms.item(i);
+        const attribute = form.attributes['data-action'];
+        if (!attribute) {
+            continue;
+        }
+        const acao = attribute.nodeValue;
+        if (!acao) {
+            continue;
+        }
+
+        switch (acao) {
+            case 'create':
+                form.onclick = create;
+                break;
+            case 'delete':
+                form.onclick = deletar;
+                break;
+            case 'filtroClear':
+                form.onclick = filtrarClear;
+                break;
+            default :
+                ;
+        }
+    }
+
+    criarAcoes();
+    initWebSocket();
+
+    getVersao((data) => {
+        lista();
+        const ele = document.getElementById("versao");
+        console.log(data);
+
+        ele.textContent = `${data.projeto}: ${data.versao} - ${data.data}`;
+    });
+
+    const div = document.createElement("div");
+    div.textContent = "FOOTER";
+
+    const divh = document.createElement("div");
+    divh.textContent = "HEADER";
+
+    const corpo = document.createElement("div");
+    corpo.textContent = "CORPO";
+
+    const modal = new Modal('teste');
+    console.log(modal);
+    const modal_ = modal.create(divh, corpo, div);
+    document.body.appendChild(modal_);
+    if (modal) {
+        modal.show();
+    }
 };
 
 
