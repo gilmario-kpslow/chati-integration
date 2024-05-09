@@ -2,15 +2,22 @@ import {Component} from './component.js';
 class Modal extends Component {
 
     el = undefined;
+    backdrop = undefined;
     id = undefined;
     pai = undefined;
-    constructor(id, pai) {
+    constructor(id) {
         super();
         this.id = id;
     }
 
     create(header, content, footer) {
-        // <div class="modal fade" id="uploaderModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="uploaderModal" aria-hidden="true">
+
+        this.backdrop = document.createElement('div');
+        this.backdrop.classList.add('modal-backdrop');
+        this.backdrop.classList.add('fade');
+        this.backdrop.classList.add('show');
+        this.backdrop.addEventListener('click', this.pulse);
+
         this.el = document.createElement('div');
         this.el.classList.add('modal');
         this.el.classList.add('fade');
@@ -18,6 +25,9 @@ class Modal extends Component {
         this.el.setAttribute('tabindex', '-1');
         this.el.setAttribute('aria-labelledby', this.id);
         this.el.setAttribute('aria-hidden', 'true');
+        this.el.setAttribute('id', this.id);
+        this.el.style.display = 'none';
+//        this.el.addEventListener('click', this.pulse);
 
         const def = document.createElement('div');
         def.classList.add('modal-dialog');
@@ -30,9 +40,20 @@ class Modal extends Component {
 
         def.appendChild(_content);
 
+        // <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+        const buttonHide = document.createElement('button');
+        buttonHide.setAttribute('type', 'button');
+        buttonHide.setAttribute('data-bs-dismiss', 'modal');
+        buttonHide.setAttribute('aria-label', 'Close');
+        buttonHide.classList.add('btn-close');
+        buttonHide.addEventListener('click', this.hide);
+
+
         const _header = document.createElement('div');
         _header.classList.add('modal-header');
         _header.appendChild(header);
+        _header.appendChild(buttonHide);
         _content.appendChild(_header);
 
         const _body = document.createElement('div');
@@ -49,23 +70,45 @@ class Modal extends Component {
         return this.el;
     }
 
-    show = () => {
+    show() {
         console.log(this.id);
-        const botao = document.createElement('button');
-        botao.setAttribute('type', 'button');
-        botao.textContent = 'titulo';
-        botao.setAttribute('data-bs-target', this.id);
-        botao.setAttribute('data-bs-backdrop', 'static');
-        botao.setAttribute('data-bs-toggle', 'modal');
-        document.body.appendChild(botao);
-        // botao.click();
-        // document.body.removeChild(botao);
+        document.body.appendChild(this.backdrop);
+        const modal = document.getElementById(this.id);
+        modal.classList.add('show');
+        modal.style.display = 'block';
+        modal.setAttribute('aria-hidden', 'false');
+        modal.setAttribute('modal', 'true');
+        modal.setAttribute('role', 'dialog');
+        document.body.classList.add('modal-open');
+        document.body.style.overflow = 'hidden';
+        document.body.style.paddingRight = '0px';
+        document.body.setAttribute('data-bs-overflow', 'hidden');
+        document.body.setAttribute('data-bs-padding-right', '0px');
     }
 
     hide = () => {
+        const modal = document.getElementById(this.id);
+        modal.classList.remove('show');
+//        document.body.style = undefined;
+
         setTimeout(() => {
-            const loader = document.getElementById('loader');
-            loader.classList.add('d-none');
+            document.body.classList.remove('modal-open');
+            modal.classList.add('show');
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('modal');
+            document.body.removeChild(this.backdrop);
+
+        }, 400);
+    }
+
+    pulse() {
+        const modal = document.getElementById(this.id);
+        modal.classList.add('modal-static');
+//        document.body.style = undefined;
+
+        setTimeout(() => {
+            modal.classList.remove('modal-static');
         }, 400);
     }
 

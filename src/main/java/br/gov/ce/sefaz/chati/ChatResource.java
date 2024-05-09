@@ -61,6 +61,13 @@ public class ChatResource {
         service.execute(chave, values);
     }
 
+    @GET
+    @Path("notificar/{chave}")
+    public void notificar(@PathParam("chave") String chave, @Context UriInfo uriInfo) throws Exception {
+        MultivaluedMap<String, String> values = uriInfo.getQueryParameters();
+        service.notificar(chave, values);
+    }
+
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
