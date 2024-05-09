@@ -92,12 +92,13 @@ class Modal extends Component {
 //        document.body.style = undefined;
 
         setTimeout(() => {
+            document.body.removeChild(this.backdrop);
             document.body.classList.remove('modal-open');
             modal.classList.add('show');
             modal.style.display = 'none';
             modal.setAttribute('aria-hidden', 'true');
             modal.removeAttribute('modal');
-            document.body.removeChild(this.backdrop);
+            console.log(this.backdrop);
 
         }, 400);
     }

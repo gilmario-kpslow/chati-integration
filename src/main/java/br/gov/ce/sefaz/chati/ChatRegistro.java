@@ -19,6 +19,6 @@ public class ChatRegistro extends Entity<String> {
     private String url;
     private String id;
     private String cor;
-    private String assunto;
+    private String topico;
 
 }
