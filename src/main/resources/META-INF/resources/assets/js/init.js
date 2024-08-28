@@ -700,22 +700,22 @@ const init = () => {
         ele.textContent = `${data.projeto}: ${data.versao} - ${data.data}`;
     });
 
-    const div = document.createElement("div");
-    div.textContent = "FOOTER";
+    // const div = document.createElement("div");
+    // div.textContent = "FOOTER";
 
-    const divh = document.createElement("div");
-    divh.textContent = "HEADER";
+    // const divh = document.createElement("div");
+    // divh.textContent = "HEADER";
 
-    const corpo = document.createElement("div");
-    corpo.textContent = "CORPO";
+    // const corpo = document.createElement("div");
+    // corpo.textContent = "CORPO";
 
-    const modal = new Modal('teste');
-    console.log(modal);
-    const modal_ = modal.create(divh, corpo, div);
-    document.body.appendChild(modal_);
-    if (modal) {
-        modal.show();
-    }
+    // const modal = new Modal('teste');
+    // console.log(modal);
+    // const modal_ = modal.create(divh, corpo, div);
+    // document.body.appendChild(modal_);
+    // if (modal) {
+    //     modal.show();
+    // }
 };
 
 
