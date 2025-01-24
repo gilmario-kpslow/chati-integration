@@ -59,10 +59,6 @@
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-websockets</artifactId>
         </dependency>
-        <!--        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-webjars-locator</artifactId>
-        </dependency>-->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-junit5</artifactId>

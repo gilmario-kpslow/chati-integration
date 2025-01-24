@@ -1,0 +1,170 @@
+<main class="d-flex flex-column">
+  <app-cabecalho></app-cabecalho>
+  <section class="flex-fill">
+    <div class="container-fluid">
+      <div class="card mt-2">
+        <div class="card-header fw-bolder">
+          CHATS
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-12">
+              <label class="fw-bold" for="filtro">Filtro</label>
+              <div class="input-group">
+                <input class="form-control" type="text" id="filtro" name="filtro"
+                  placeholder="Digite algo para filtrar">
+                <button class="btn btn-outline-secondary" data-action="filtroClear" type="button">
+                  <img class="img-fluid" src="/assets/imagens/search_clear.svg" width="24" alt="chat-icon logo" />
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="row" data-lista></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <app-rodape></app-rodape>
+</main>
+
+<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-ls modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Novo Chat</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form data-form="create">
+          <input class="form-control" type="hidden" name="id">
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <label class="fw-bold" for="titulo">Título </label>
+              <div class="input-group">
+                <input class="form-control" type="text" id="titulo" name="titulo" placeholder="Título do Evento">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                  data-bs-target="#collapseTitulo" aria-controls="collapseExample">
+                  <img class="img-fluid" src="/assets/imagens/info.svg" width="24" alt="chat-icon logo" />
+                </button>
+              </div>
+              <div class="collapse" id="collapseTitulo">
+                <div class="card card-body">
+                  Título do evento
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="fw-bold" for="topico">Topico </label>
+              <div class="input-group">
+                <input class="form-control" type="text" maxlength="20" id="topico" name="topico"
+                  placeholder="Separar conversa em topicos">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                  data-bs-target="#collapseTopico" aria-controls="collapseExample">
+                  <img class="img-fluid" src="/assets/imagens/info.svg" width="24" alt="chat-icon logo" />
+                </button>
+              </div>
+              <div class="collapse" id="collapseTopico">
+                <div class="card card-body">
+                  Agrupa as notificações em topicos
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mb-2">
+              <label class="fw-bold">Mensagem</label>
+              <div class="input-group">
+                <input class="form-control" type="text" name="mensagem" placeholder="Texto informado na mensagem">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                  data-bs-target="#collapseMensagem" aria-controls="collapseExample">
+                  <img class="img-fluid" src="/assets/imagens/info.svg" width="24" alt="chat-icon logo" />
+                </button>
+              </div>
+              <div class="collapse" id="collapseMensagem">
+                <div class="card card-body">
+                  Mensagem mostrada na notificação.<br />
+                  (Utilize '' para interpolar váriaveis pelo query string).<br />
+                  ex: Notificação emitida por
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mb-2">
+              <label class="fw-bold">URL</label>
+              <div class="input-group">
+                <input class="form-control" type="url" name="url" placeholder="URL">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                  data-bs-target="#collapseUrl" aria-controls="collapseUrl">
+                  <img class="img-fluid" src="/assets/imagens/info.svg" width="24" alt="chat-icon logo" />
+                </button>
+              </div>
+              <div class="collapse" id="collapseUrl">
+                <div class="card card-body">
+                  Url de chamada do google.
+                  ex: https://chat.google.com/34343434/dadasdas
+                </div>
+              </div>
+            </div>
+            <div class="col-md-12 mb-3">
+              <label class="fw-bold">COR</label>
+              <div class="input-group">
+                <input class="form-control form-control-color" type="color" name="cor" placeholder="Cor">
+                <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                  data-bs-target="#collapseCor" aria-controls="collapseCor">
+                  <img class="img-fluid" src="/assets/imagens/info.svg" width="24" alt="chat-icon logo" />
+                </button>
+              </div>
+              <div class="collapse" id="collapseCor">
+                <div class="card card-body">
+                  Cor do card
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-action="create" data-form="create">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="confirmar" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmar"
+  aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form data-form="delete">
+          Deseja excluir o esse registro?
+          <input class="form-control" type="hidden" name="id">
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-success" data-action="delete" data-form="delete">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="uploaderModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="uploaderModal"
+  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">Upload</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <input class="form-control" data-action="upload" type="file" name="file">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+html,
+body,
+main {
+    height: 100vh;
+    padding: 0 !important;
+    margin: 0 !important;
+}
