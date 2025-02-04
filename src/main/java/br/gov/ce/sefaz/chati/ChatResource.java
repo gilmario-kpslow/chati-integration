@@ -1,5 +1,6 @@
 package br.gov.ce.sefaz.chati;
 
+import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -36,7 +37,7 @@ public class ChatResource {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public List<ChatRegistro> getLista() throws Exception {
+    public PageResponse<ChatRegistro> getLista() throws Exception {
         return service.lista();
     }
 
@@ -44,7 +45,7 @@ public class ChatResource {
     @Path("getid/{chave}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public ChatRegistro getListaChat(@PathParam("chave") String chave) throws Exception {
-        return service.getByChave(chave);
+        return service.getOne(chave);
     }
 
     @DELETE
@@ -75,4 +76,5 @@ public class ChatResource {
     public void restore(List<ChatRegistro> lista) throws Exception {
         service.restoreBackup(lista);
     }
+
 }

@@ -12,19 +12,9 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class Grupo extends Entity<String> {
+public class Grupo extends Entity {
 
     private String nome;
     private String cor;
-    private String id;
 
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
 }

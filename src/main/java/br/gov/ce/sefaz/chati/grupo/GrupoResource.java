@@ -1,6 +1,7 @@
 package br.gov.ce.sefaz.chati.grupo;
 
 import br.gov.ce.sefaz.chati.*;
+import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -10,7 +11,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import java.util.List;
 
 /**
  *
@@ -34,7 +34,7 @@ public class GrupoResource {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public List<Grupo> getLista() throws Exception {
+    public PageResponse<Grupo> getLista() throws Exception {
         return service.lista();
     }
 

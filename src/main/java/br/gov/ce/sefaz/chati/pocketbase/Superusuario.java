@@ -1,28 +1,28 @@
-package br.gov.ce.sefaz.chati.core;
+package br.gov.ce.sefaz.chati.pocketbase;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
  * @author gilmario
- *
  */
-@EqualsAndHashCode()
 @Getter
 @Setter
-@NoArgsConstructor
-public abstract class Entity {
+@ToString
+public class Superusuario {
 
-    protected String collectionId;
-    protected String collectionName;
-    protected String id;
+    private String collectionId;
+    private String collectionName;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS'Z'", shape = JsonFormat.Shape.STRING)
-    protected LocalDateTime created;
+    private LocalDateTime created;
+    private String email;
+    private Boolean emailVisibility;
+    private String id;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS'Z'", shape = JsonFormat.Shape.STRING)
-    protected LocalDateTime updated;
+    private LocalDateTime updated;
+    private Boolean verified;
 }

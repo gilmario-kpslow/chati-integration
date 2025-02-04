@@ -1,7 +1,8 @@
 package br.gov.ce.sefaz.chati;
 
-import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
+import br.gov.ce.sefaz.chati.core.DatabaseService;
 import br.gov.ce.sefaz.chati.core.GenericService;
+import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -9,7 +10,6 @@ import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,13 +18,10 @@ import java.util.logging.Logger;
  * @author gilmario
  */
 @ApplicationScoped
-public class ChatService extends GenericService<String, ChatRegistro> {
+public class ChatService extends GenericService<ChatRegistro> {
 
     @Inject
     ChatDatabaseService databaseService;
-
-    @Inject
-    NoDatabaseChatRegistroService noDatabaseService;
 
     @Inject
     GoogleExecutor executor;
@@ -55,7 +52,7 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     }
 
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
-        ChatRegistro dto = getByChave(chave);
+        ChatRegistro dto = getOne(chave);
         String mesagem = this.convertMessage(dto.getMensagem(), values);
         chatSocket.broadcast("Executando notificação!" + dto.getTitulo());
         executor.executar(dto.getUrl(), mesagem);
@@ -64,29 +61,11 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     @Override
     protected ChatRegistro save(ChatRegistro registro) throws Exception {
         chatSocket.broadcast("Registro Salvo!");
-        registro.setId(UUID.randomUUID().toString());
+//        registro.setId(UUID.randomUUID().toString());
         if (Objects.isNull(registro.getCor())) {
             registro.setCor("#003399");
         }
-
         return super.save(registro);
-    }
-
-    public ChatRegistro getByChave(String chave) throws Exception {
-        if (noDatabase) {
-            return noDatabaseService.getByChave(chave);
-        }
-        return databaseService.getByChave(chave);
-    }
-
-    @Override
-    protected ChatDatabaseService getDatabaseService() {
-        return this.databaseService;
-    }
-
-    @Override
-    protected NoDatabaseChatRegistroService getNoDatabaseService() {
-        return this.noDatabaseService;
     }
 
     public void restoreBackup(List<ChatRegistro> lista) {
@@ -100,7 +79,7 @@ public class ChatService extends GenericService<String, ChatRegistro> {
     }
 
     public void notificar(String chave, MultivaluedMap<String, String> values) throws Exception {
-        ChatRegistro dto = getByChave(chave);
+        ChatRegistro dto = getOne(chave);
         String mesagem = this.convertMessage(dto.getMensagem(), values);
         chatSocket.broadcast(mesagem);
     }
@@ -116,6 +95,11 @@ public class ChatService extends GenericService<String, ChatRegistro> {
         }
 
         return novaMesagem;
+    }
+
+    @Override
+    protected DatabaseService<ChatRegistro> getDatabaseService() {
+        return databaseService;
     }
 
 }

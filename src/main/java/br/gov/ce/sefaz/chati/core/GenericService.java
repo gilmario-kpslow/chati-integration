@@ -1,31 +1,19 @@
 package br.gov.ce.sefaz.chati.core;
 
-import java.io.Serializable;
-import java.util.List;
+import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
 import java.util.Objects;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
  *
  * @author gilmario
- * @param <P>
  * @param <K>
  */
-public abstract class GenericService<P extends Serializable, K extends Entity<P>> {
+public abstract class GenericService< K extends Entity> {
 
-    @ConfigProperty(name = "nodatabase")
-    protected boolean noDatabase;
+    protected abstract DatabaseService<K> getDatabaseService();
 
-    protected abstract DatabaseService<P, K> getDatabaseService();
-
-    protected abstract NoDatabaseService< K, P> getNoDatabaseService();
-
-    public List<K> lista() throws Exception {
-        if (noDatabase) {
-            return getNoDatabaseService().lista();
-        } else {
-            return getDatabaseService().lista();
-        }
+    public PageResponse<K> lista() throws Exception {
+        return getDatabaseService().lista();
     }
 
     protected void validarSave(K registro) {
@@ -47,26 +35,20 @@ public abstract class GenericService<P extends Serializable, K extends Entity<P>
 
     protected K save(K registro) throws Exception {
         validarSave(registro);
-        if (noDatabase) {
-            return getNoDatabaseService().save(registro);
-        }
         return getDatabaseService().save(registro);
     }
 
     K update(K registro) throws Exception {
         validarUpdate(registro);
-        if (noDatabase) {
-            return getNoDatabaseService().update(registro);
-        }
         return getDatabaseService().update(registro);
     }
 
-    public void delete(P id) {
-        if (noDatabase) {
-            getNoDatabaseService().delete(id);
-        } else {
-            getDatabaseService().delete(id);
-        }
+    public void delete(String id) {
+        getDatabaseService().delete(id);
+    }
+
+    public K getOne(String id) {
+        return getDatabaseService().getOne(id);
     }
 
 }

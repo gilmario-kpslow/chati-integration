@@ -9,4 +9,13 @@
                 <goal>quarkus:dev</goal>
             </goals>
         </action>
+        <action>
+            <actionName>debug</actionName>
+            <packagings>
+                <packaging>jar</packaging>
+            </packagings>
+            <goals>
+                <goal>quarkus:dev</goal>
+            </goals>
+        </action>
     </actions>

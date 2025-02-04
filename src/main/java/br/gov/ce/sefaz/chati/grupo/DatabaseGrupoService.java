@@ -8,14 +8,10 @@ import jakarta.enterprise.context.Dependent;
  * @author gilmario
  */
 @Dependent
-public class DatabaseGrupoService extends DatabaseService<String, Grupo> {
+public class DatabaseGrupoService extends DatabaseService<Grupo> {
 
     public DatabaseGrupoService() {
         super("grupo");
     }
 
-    @Override
-    protected Class<Grupo> getEntityClass() {
-        return Grupo.class;
-    }
 }

@@ -1,0 +1,22 @@
+<div class="card mt-2">
+  <div class="card-header fw-bolder">CHATS</div>
+  <div class="card-body">
+    <div class="row mb-3">
+      <div class="col-md-12">
+        <label class="fw-bold" for="filtro">Filtro</label>
+        <div class="input-group">
+          <input class="form-control" type="text" id="filtro" name="filtro" placeholder="Digite algo para filtrar" />
+          <button class="btn btn-outline-secondary" data-action="filtroClear" type="button">
+            <img class="img-fluid" src="/assets/imagens/search_clear.svg" width="24" alt="chat-icon logo" />
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" *ngFor="let item of chats">
+        <app-chat-card [chat]="item"></app-chat-card>
+      </div>
+    </div>
+  </div>
+</div>

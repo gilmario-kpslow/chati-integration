@@ -1,6 +1,7 @@
 package br.gov.ce.sefaz.chati.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
 import java.io.IOException;
 import java.util.Collections;
@@ -17,7 +18,7 @@ public class JsonConverter {
 
     static {
         objectMapper = new ObjectMapper();
-//	objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     public static <T> List<T> fromJsonList(String json, Class<T> classe) throws IOException {

@@ -4,12 +4,17 @@
             <div class="d-flex justify-content">
                 <img class="img-fluid" src="/assets/imagens/logo.svg" width="48" alt="chat-icon logo" />
                 <span class="h3 flex-grow-1 align-self-center m-0"> CHATI - O CHAT CHATO</span>
-                <div class="dropdown dropstart">
-                    <button class="btn btn-default dropdown-toggle" type="button" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        ACÕES
+                <div ngbDropdown class="d-inline-block">
+                    <button type="button" class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>
+                        Ações
                     </button>
-                    <ul class="dropdown-menu" id="acoes"></ul>
+                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                        <button ngbDropdownItem type="button" (click)="novoEvent()">Novo</button>
+                        <button ngbDropdownItem type="button" (click)="atualizarEvent()">Atualizar</button>
+                        <button ngbDropdownItem type="button" (click)="downloadBackup()">Download backup</button>
+                        <button ngbDropdownItem type="button" (click)="uploadBackup()">Restore backup</button>
+                        <button ngbDropdownItem type="button" (click)="habilitarNotificacoes()">Notificações</button>
+                    </div>
                 </div>
             </div>
         </div>
