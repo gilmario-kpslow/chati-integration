@@ -2,7 +2,33 @@
     <div class="d-flex justify-content-between border-bottom">
         <div class="h4 text-light">
             {{chat?.titulo}}
-
         </div>
+        <div ngbDropdown class="d-inline-block">
+            <button type="button" class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>
+                Ações
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button ngbDropdownItem type="button">Novo</button>
+                <!-- <button ngbDropdownItem type="button" (click)="atualizarEvent()">Atualizar</button> -->
+                <!-- <button ngbDropdownItem type="button" (click)="downloadBackup()">Download backup</button> -->
+                <!-- <button ngbDropdownItem type="button" (click)="uploadBackup()">Restore backup</button> -->
+                <!-- <button ngbDropdownItem type="button" (click)="habilitarNotificacoes()">Notificações</button> -->
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="mb-2 py-2 text-light">
+            <div class="text-light">Mensagem</div>
+            <div class="fw-bold">
+                {{chat?.mensagem}}
+            </div>
+        </div>
+        <div>
+            <div>URL</div>
+            <div>
+                {{chat?.url}}
+            </div>
+        </div>
+
     </div>
 </div>

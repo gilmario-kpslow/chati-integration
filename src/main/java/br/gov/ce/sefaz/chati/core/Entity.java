@@ -18,9 +18,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public abstract class Entity {
 
+    protected String id;
     protected String collectionId;
     protected String collectionName;
-    protected String id;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS'Z'", shape = JsonFormat.Shape.STRING)
     protected LocalDateTime created;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss.SSS'Z'", shape = JsonFormat.Shape.STRING)
