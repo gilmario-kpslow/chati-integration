@@ -38,3 +38,46 @@ nb-configuration.xml
 
 # Local environment
 .env
+
+# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+
+# Compiled output
+/chat-front/dist
+/chat-front/tmp
+/chat-front/out-tsc
+/chat-front/bazel-out
+
+# Node
+/chat-front/node_modules
+/chat-front/npm-debug.log
+/chat-front/yarn-error.log
+
+# IDEs and editors
+/chat-front/.idea/
+/chat-front/.project
+/chat-front/.classpath
+/chat-front/.c9/
+/chat-front/*.launch
+/chat-front/.settings/
+*.sublime-workspace
+
+# Visual Studio Code
+/chat-front/.vscode/*
+!/chat-front/.vscode/settings.json
+!/chat-front/.vscode/tasks.json
+!/chat-front/.vscode/launch.json
+!/chat-front/.vscode/extensions.json
+/chat-front/.history/*
+
+# Miscellaneous
+/chat-front/.angular/cache
+/chat-front/.sass-cache/
+/chat-front/connect.lock
+/chat-front/coverage
+/chat-front/libpeerconnection.log
+/chat-front/testem.log
+/chat-front/typings
+
+# System files
+/chat-front/.DS_Store
+/chat-front/Thumbs.db
