@@ -1,6 +1,6 @@
 package br.gov.ce.sefaz.chati.pocketbase;
 
-import br.gov.ce.sefaz.chati.core.Entity;
+import br.gov.ce.sefaz.chati.core.BaseEntidade;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-public class PageResponse<T extends Entity> {
+public class PageResponse<T extends BaseEntidade> {
 
     List<T> items;
     Integer page;

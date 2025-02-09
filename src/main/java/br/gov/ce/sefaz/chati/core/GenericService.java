@@ -8,7 +8,7 @@ import java.util.Objects;
  * @author gilmario
  * @param <K>
  */
-public abstract class GenericService< K extends Entity> {
+public abstract class GenericService< K extends BaseEntidade> {
 
     protected abstract DatabaseService<K> getDatabaseService();
 

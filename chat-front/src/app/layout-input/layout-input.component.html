@@ -1,0 +1,7 @@
+<div class="w-100 pb-2">
+  <label class="fw-bold">{{label}}</label>
+  <input [type]="type" class="form-control" name="nome" [formControl]="form" [placeholder]="placeholder">
+  <div *ngIf="hasError()" class="px-2 error text-danger fw-bold">
+    {{errorMessage | appErro}}
+  </div>
+</div>

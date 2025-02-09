@@ -1,0 +1,5 @@
+:host .error {
+    font-size: 0.9em;
+    display: block;
+    position: absolute;
+}

@@ -16,7 +16,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public abstract class Entity {
+public abstract class BaseEntidade {
 
     protected String id;
     protected String collectionId;

@@ -16,10 +16,10 @@
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
   </div>
   <div class="modal-body">
-    <app-chat-cadastro></app-chat-cadastro>
+    <app-chat-cadastro #cadastro></app-chat-cadastro>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-secondary" (click)="cadastro.salvar()">Save</button>
   </div>
 </ng-template>
 

@@ -9,7 +9,7 @@ import jakarta.inject.Inject;
  * @author gilmario
  * @param <K>
  */
-public abstract class DatabaseService<K extends Entity> {
+public abstract class DatabaseService<K extends BaseEntidade> {
 
     private final String entityName;
 
@@ -24,7 +24,7 @@ public abstract class DatabaseService<K extends Entity> {
         return pocketBaseService.listar(entityName);
     }
 
-    public K save(K entity) throws Exception {
+    public <K extends BaseEntidade> K save(K entity) throws Exception {
         return pocketBaseService.create(entityName, entity);
     }
 

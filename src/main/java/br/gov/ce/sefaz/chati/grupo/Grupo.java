@@ -1,6 +1,6 @@
 package br.gov.ce.sefaz.chati.grupo;
 
-import br.gov.ce.sefaz.chati.core.Entity;
+import br.gov.ce.sefaz.chati.core.BaseEntidade;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = false)
-public class Grupo extends Entity {
+public class Grupo extends BaseEntidade {
 
     private String nome;
     private String cor;
