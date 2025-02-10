@@ -8,12 +8,12 @@ import java.util.Objects;
  * @author gilmario
  * @param <K>
  */
-public abstract class GenericService< K extends BaseEntidade> {
+public abstract class GenericService<K extends BaseEntidade> {
 
     protected abstract DatabaseService<K> getDatabaseService();
 
     public PageResponse<K> lista() throws Exception {
-        return getDatabaseService().lista();
+        return getDatabaseService().listar();
     }
 
     protected void validarSave(K registro) {
@@ -35,7 +35,7 @@ public abstract class GenericService< K extends BaseEntidade> {
 
     protected K save(K registro) throws Exception {
         validarSave(registro);
-        return getDatabaseService().save(registro);
+        return getDatabaseService().create(registro);
     }
 
     K update(K registro) throws Exception {

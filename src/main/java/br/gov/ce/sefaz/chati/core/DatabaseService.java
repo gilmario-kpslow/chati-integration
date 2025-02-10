@@ -3,13 +3,14 @@ package br.gov.ce.sefaz.chati.core;
 import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
 import br.gov.ce.sefaz.chati.pocketbase.PocketBaseService;
 import jakarta.inject.Inject;
+import java.io.IOException;
 
 /**
  *
  * @author gilmario
- * @param <K>
+ * @param <T>
  */
-public abstract class DatabaseService<K extends BaseEntidade> {
+public abstract class DatabaseService<T extends BaseEntidade> {
 
     private final String entityName;
 
@@ -20,23 +21,56 @@ public abstract class DatabaseService<K extends BaseEntidade> {
         this.entityName = entity;
     }
 
-    public PageResponse<K> lista() throws Exception {
-        return pocketBaseService.listar(entityName);
+    protected abstract Class<T> getClassEntity();
+
+    public PageResponse<T> listar() {
+//        return client.listar(getToken(), entityName);
+        return null;
     }
 
-    public <K extends BaseEntidade> K save(K entity) throws Exception {
-        return pocketBaseService.create(entityName, entity);
+    public T create(T t) throws IOException, InterruptedException {
+        return pocketBaseService.create(entityName, t, getClassEntity());
     }
 
-    public K update(K entity) throws Exception {
-        return pocketBaseService.update(entityName, entity);
+//    public T update(T t) {
+//        return client.update(getToken(), entityName, t.getId(), t);
+//    }
+//
+//    public void delete(String id) {
+//        client.delete(getToken(), entityName, id);
+//    }
+//
+//    public T getOne(String id) {
+//        return client.getOne(getToken(), entityName, id);
+//    }
+//
+//    private String getToken() {
+//        return "Bearer " + getLogin().getToken();
+//    }
+//    public PageResponse<T> lista() throws Exception {
+//        return pocketBaseService.listar(entityName);
+//    }
+//
+//    public T save(T entity) throws Exception {
+//        return pocketBaseService.create(entityName, entity);
+//    }
+//
+    public T update(T entity) throws Exception {
+//        return pocketBaseService.update(entityName, entity);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+//
+//    public void delete(String id) {
+//        pocketBaseService.delete(entityName, id);
+//    }
+//
+
+    public T getOne(String id) {
+//        return pocketBaseService.getOne(entityName, id);
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
-    public void delete(String id) {
-        pocketBaseService.delete(entityName, id);
-    }
-
-    public K getOne(String id) {
-        return pocketBaseService.getOne(entityName, id);
+    void delete(String id) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

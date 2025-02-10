@@ -14,4 +14,9 @@ public class ChatDatabaseService extends DatabaseService<ChatRegistro> {
         super("chatregistro");
     }
 
+    @Override
+    protected Class<ChatRegistro> getClassEntity() {
+        return ChatRegistro.class;
+    }
+
 }

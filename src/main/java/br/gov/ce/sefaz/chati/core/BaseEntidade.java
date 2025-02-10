@@ -12,7 +12,7 @@ import lombok.Setter;
  * @author gilmario
  *
  */
-@EqualsAndHashCode()
+@EqualsAndHashCode
 @Getter
 @Setter
 @NoArgsConstructor
