@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -11,8 +11,16 @@ import { CommonModule } from '@angular/common';
 import { LayoutInputComponent } from '../layout-input/layout-input.component';
 import { LayoutSelectComponent } from '../layout-select/layout-select.component';
 import { MensagemService } from '../mensagens/messagem.service';
-import { MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { Chat } from '../core/chat.model';
 
 @Component({
   selector: 'app-chat-cadastro',
@@ -26,16 +34,16 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './chat-cadastro.component.html',
   styleUrl: './chat-cadastro.component.css',
 })
-export class ChatCadastroComponent {
-
+export class ChatCadastroComponent implements OnInit {
   service: ChatService = inject(ChatService);
   notify: MensagemService = inject(MensagemService);
   dialogRef = inject(MatDialogRef);
+  data = inject<any>(MAT_DIALOG_DATA);
   @Output() savedEvent = new EventEmitter();
 
   form = new FormGroup({
@@ -46,7 +54,20 @@ export class ChatCadastroComponent {
     cor: new FormControl(null, [Validators.required]),
   });
 
-  temas: string[] = ['red', 'green', 'blue', 'yellow'];
+  ngOnInit(): void {
+    if (this.data) {
+      this.form.patchValue(this.data);
+    }
+  }
+
+  temas: string[] = [
+    'tema-vermelho',
+    'tema-verde',
+    'tema-azul',
+    'tema-amarelo',
+    'tema-ciano',
+    'tema-fuscia',
+  ];
 
   salvar() {
     if (this.form.valid) {

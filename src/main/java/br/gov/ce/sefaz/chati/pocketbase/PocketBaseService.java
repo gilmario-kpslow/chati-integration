@@ -84,18 +84,52 @@ public class PocketBaseService {
         return JsonConverter.fromJson(response.body(), classResponse);
     }
 
-//    public T update(String entityName, T t) {
-//        return client.update(getToken(), entityName, t.getId(), t);
-//    }
-//
-//    public void delete(String entityName, String id) {
-//        client.delete(getToken(), entityName, id);
-//    }
-//
-//    public T getOne(String entityName, String id) {
-//        return client.getOne(getToken(), entityName, id);
-//    }
-//
+    public <T extends BaseEntidade> T update(String entityName, T t, Class<T> classResponse, String id) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest
+                .newBuilder()
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header("Accept", MediaType.APPLICATION_JSON)
+                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append(entityName).append("/records/").append(id).toString()))
+                .header("Authorization", getToken())
+                .method("PATCH", HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(t)))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return JsonConverter.fromJson(response.body(), classResponse);
+    }
+
+    public void delete(String entityName, String id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest
+                .newBuilder()
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header("Accept", MediaType.APPLICATION_JSON)
+                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append(entityName).append("/records/").append(id).toString()))
+                .header("Authorization", getToken())
+                .DELETE()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+    }
+
+    public T getOne(String entityName, String id) {
+        HttpRequest request = HttpRequest
+                .newBuilder()
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header("Accept", MediaType.APPLICATION_JSON)
+                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append(entityName).append("/records/").append(id).toString()))
+                .header("Authorization", getToken())
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return JsonConverter.fromJson(response.body(), classResponse);
+
+    }
+
     private String getToken() throws IOException, InterruptedException {
         return "Bearer " + getLogin().getToken();
     }

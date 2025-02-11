@@ -56,8 +56,7 @@ public abstract class DatabaseService<T extends BaseEntidade> {
 //    }
 //
     public T update(T entity) throws Exception {
-//        return pocketBaseService.update(entityName, entity);
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return this.pocketBaseService.update(entityName, entity, getClassEntity(), entity.getId());
     }
 //
 //    public void delete(String id) {
