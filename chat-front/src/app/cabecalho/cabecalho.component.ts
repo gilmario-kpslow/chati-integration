@@ -1,7 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { AppService } from '../core/app.service';
 
 @Component({
   selector: 'app-cabecalho',
@@ -14,7 +15,8 @@ export class CabecalhoComponent {
   @Output() atualizar = new EventEmitter();
   @Output() backup = new EventEmitter();
   @Output() restore = new EventEmitter();
-  @Output() notificacoes = new EventEmitter();
+  // @Output() notificacoes = new EventEmitter();
+  appService = inject(AppService);
 
   novoEvent() {
     this.novo.emit();
@@ -33,6 +35,6 @@ export class CabecalhoComponent {
   }
 
   habilitarNotificacoes() {
-    this.notificacoes.emit();
+    this.appService.habilitarNotificacoes();
   }
 }

@@ -21,6 +21,7 @@ import {
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { Chat } from '../core/chat.model';
+import { AppService } from '../core/app.service';
 
 @Component({
   selector: 'app-chat-cadastro',
@@ -44,7 +45,7 @@ export class ChatCadastroComponent implements OnInit {
   notify: MensagemService = inject(MensagemService);
   dialogRef = inject(MatDialogRef);
   data = inject<any>(MAT_DIALOG_DATA);
-  @Output() savedEvent = new EventEmitter();
+  appService = inject(AppService);
 
   form = new FormGroup({
     id: new FormControl(null),
@@ -73,7 +74,7 @@ export class ChatCadastroComponent implements OnInit {
     if (this.form.valid) {
       this.service.save(this.form.value).subscribe(() => {
         this.notify.sucesso('Chat salvo com sucesso!');
-        this.savedEvent.emit();
+        this.appService.notificarChats();
         this.dialogRef.close();
       });
       return;

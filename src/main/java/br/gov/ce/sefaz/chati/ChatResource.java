@@ -13,7 +13,6 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
-import java.util.List;
 
 /**
  *
@@ -69,12 +68,11 @@ public class ChatResource {
         service.notificar(chave, values);
     }
 
-    @POST
-    @Consumes(value = {MediaType.APPLICATION_JSON})
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("restore")
-    public void restore(List<ChatRegistro> lista) throws Exception {
-        service.restoreBackup(lista);
-    }
-
+//    @POST
+//    @Consumes(value = {MediaType.APPLICATION_JSON})
+//    @Produces(value = {MediaType.APPLICATION_JSON})
+//    @Path("restore")
+//    public void restore(List<ChatRegistro> lista) throws Exception {
+//        service.restoreBackup(lista);
+//    }
 }

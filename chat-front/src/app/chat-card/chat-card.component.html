@@ -2,28 +2,36 @@
     <mat-card-header>
         <div class="d-flex justify-content-between align-items-center w-100 header">
             <mat-card-title> {{chat?.titulo}}</mat-card-title>
-            <button mat-mini-fab [matMenuTriggerFor]="menu">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu">
-                <button type="button" mat-menu-item (click)="editar()">Editar</button>
-                <button type="button" mat-menu-item (click)="excluir()">Excluir</button>
-                <button type="button" mat-menu-item (click)="testar()">Teste</button>
-                <button type="button" mat-menu-item (click)="expande = true">Expandir</button>
-            </mat-menu>
+            <div>
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button type="button" mat-menu-item (click)="editar()">Editar</button>
+                    <button type="button" mat-menu-item (click)="excluir()">Excluir</button>
+                    <button type="button" mat-menu-item (click)="testar()">Executar teste</button>
+                    <button type="button" mat-menu-item (click)="nofiticar()">Notificar a si mesmo</button>
+
+                </mat-menu>
+                <button type="button" mat-icon-button *ngIf="!expande"
+                    (click)="expande = !expande"><mat-icon>expand_more</mat-icon> </button>
+                <button type="button" mat-icon-button *ngIf="expande"
+                    (click)="expande = !expande"><mat-icon>expand_less</mat-icon> </button>
+
+            </div>
         </div>
     </mat-card-header>
     <mat-card-content>
         <div>
-            <div class="mb-2 py-2">
-                <div>Mensagem</div>
-                <div class="fw-bold" [ngClass]="{'text-overflow': !expande}">
+            <div class="mb-2 py-2" *ngIf="expande">
+                <div class="fw-bold"> Mensagem</div>
+                <div [ngClass]="{'text-overflow': !expande}">
                     {{chat?.mensagem}}
                 </div>
             </div>
-            <div>
-                <div>URL</div>
-                <div class="text-overflow ">
+            <div class="mt-2">
+                <div class="fw-bold">URL</div>
+                <div [ngClass]="{'text-overflow': !expande}">
                     {{chat?.url}}
                 </div>
             </div>

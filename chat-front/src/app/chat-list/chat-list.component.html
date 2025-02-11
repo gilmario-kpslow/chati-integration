@@ -11,10 +11,11 @@
     <div class="row mb-3">
       <div class="col-md-12">
         <label class="fw-bold" for="filtro">Filtro</label>
-        <div class="input-group">
-          <input class="form-control" type="text" id="filtro" name="filtro" placeholder="Digite algo para filtrar" />
-          <button class="btn btn-outline-secondary" data-action="filtroClear" type="button">
-            <img class="img-fluid" src="/assets/imagens/search_clear.svg" width="24" alt="chat-icon logo" />
+        <div class="d-flex">
+          <input class="form-control" type="text" id="filtro" name="filtro" [formControl]="filtro"
+            placeholder="Digite algo para filtrar" />
+          <button mat-flat-button type="button" (click)="limpar()">
+            <mat-icon>delete</mat-icon> Limpar
           </button>
         </div>
       </div>
@@ -24,7 +25,7 @@
 
 
 <div class="row mt-3">
-  <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" *ngFor="let item of chats">
+  <div class="col-xl-3 col-lg-4 col-md-6 col-sm-6" *ngFor="let item of filtrados">
     <app-chat-card [chat]="item"></app-chat-card>
   </div>
 </div>

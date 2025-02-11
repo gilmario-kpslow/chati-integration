@@ -10,6 +10,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
+import java.util.logging.Logger;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
@@ -37,6 +38,7 @@ public class PocketBaseService {
         if (Objects.nonNull(loginResponse)) {
             return loginResponse;
         }
+        LOG.info("Efetuando login");
         HttpRequest request = HttpRequest
                 .newBuilder()
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -50,6 +52,7 @@ public class PocketBaseService {
 
         return loginResponse;
     }
+    private static final Logger LOG = Logger.getLogger(PocketBaseService.class.getName());
 
     public <T extends BaseEntidade> PageResponse<T> listar(String entityName, Class<T> classResponse) throws IOException, InterruptedException {
 

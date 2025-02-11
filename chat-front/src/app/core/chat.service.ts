@@ -18,4 +18,20 @@ export class ChatService {
   listar() {
     return this.http.get<any>(`${this.url}/registro`);
   }
+
+  delete(id: string) {
+    return this.http.delete(`${this.url}/registro/${id}`);
+  }
+
+  getPorId(id: string) {
+    return this.http.get(`${this.url}/registro/getid/${id}`);
+  }
+
+  executar(id: string, params: string) {
+    return this.http.get(`${this.url}/registro/executar/${id}${params}`);
+  }
+
+  notificar(id: string, params: any) {
+    return this.http.get(`${this.url}/registro/notificar/${id}?${params}`);
+  }
 }
