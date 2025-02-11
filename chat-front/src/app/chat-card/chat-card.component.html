@@ -1,34 +1,37 @@
-<div class="rounded shadow-sm p-3 mb-2 hover-efect bg-success">
-    <div class="d-flex justify-content-between border-bottom">
-        <div class="h4 text-light">
-            {{chat?.titulo}}
-        </div>
-        <div ngbDropdown class="d-inline-block">
-            <button type="button" class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>
-                Ações
-            </button>
-            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button ngbDropdownItem type="button">Novo</button>
-                <!-- <button ngbDropdownItem type="button" (click)="atualizarEvent()">Atualizar</button> -->
-                <!-- <button ngbDropdownItem type="button" (click)="downloadBackup()">Download backup</button> -->
-                <!-- <button ngbDropdownItem type="button" (click)="uploadBackup()">Restore backup</button> -->
-                <!-- <button ngbDropdownItem type="button" (click)="habilitarNotificacoes()">Notificações</button> -->
-            </div>
-        </div>
-    </div>
-    <div>
-        <div class="mb-2 py-2 text-light">
-            <div class="text-light">Mensagem</div>
-            <div class="fw-bold">
-                {{chat?.mensagem}}
-            </div>
-        </div>
-        <div>
-            <div>URL</div>
-            <div>
-                {{chat?.url}}
-            </div>
-        </div>
+<mat-card appearance="outlined" class="mb-3">
+    <mat-card-header>
+        <div class="d-flex justify-content-between w-100 ">
 
-    </div>
-</div>
+            <mat-card-title> {{chat?.titulo}}</mat-card-title>
+            <button mat-mini-fab [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item>Editar</button>
+                <button type="button" mat-menu-item>Excluir</button>
+                <button type="button" mat-menu-item>Teste</button>
+                <button type="button" mat-menu-item (click)="expande = true">Expandir</button>
+            </mat-menu>
+
+        </div>
+    </mat-card-header>
+    <mat-card-content>
+        <div>
+            <div class="mb-2 py-2">
+                <div class="text-light">Mensagem</div>
+                <div class="fw-bold" [ngClass]="{'text-overflow': !expande}">
+                    {{chat?.mensagem}}
+                </div>
+            </div>
+            <div>
+                <div>URL</div>
+                <div class="text-overflow ">
+                    {{chat?.url}}
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+    <!-- <mat-card-footer class="example-card-footer">
+
+    </mat-card-footer> -->
+</mat-card>

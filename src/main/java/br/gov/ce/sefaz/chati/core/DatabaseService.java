@@ -23,9 +23,9 @@ public abstract class DatabaseService<T extends BaseEntidade> {
 
     protected abstract Class<T> getClassEntity();
 
-    public PageResponse<T> listar() {
-//        return client.listar(getToken(), entityName);
-        return null;
+    public PageResponse<T> listar() throws IOException, InterruptedException {
+        return pocketBaseService.listar(entityName, getClassEntity());
+
     }
 
     public T create(T t) throws IOException, InterruptedException {

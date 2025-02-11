@@ -2,11 +2,12 @@ import { inject, Injectable } from '@angular/core';
 
 import { Mensagem } from './mensagem';
 import { MensagensComponent } from './mensagens.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
+
 
 @Injectable({ providedIn: 'root' })
 export class MensagemService {
-  private modalService = inject(NgbModal);
+  private modalService = inject(MatDialog);
 
   informacao(
     mensagem: string,
@@ -57,38 +58,10 @@ export class MensagemService {
   }
 
   open(mensagem: Mensagem, tipo: string, fn?: Function) {
-    const instance = this.modalService.open(MensagensComponent, {
-      ariaLabelledBy: 'modal-basic-title',
-      fullscreen: false,
-      centered: true,
+    this.modalService.open(MensagensComponent, {
+      data: { mensagem, tipo, fn }
     });
 
-    instance.componentInstance.config = { mensagem, tipo };
-
-    instance.result.then((resp) => {
-      console.log(resp);
-      if (fn) {
-        fn(resp);
-      }
-    });
-
-    // rf.afterClosed().subscribe(() => {
-    //   if (fn) {
-    //     fn();
-    //   }
-    // });
   }
 
-  // open(content: TemplateRef<any>) {
-  //     this.modalService
-  //       .open(content, { ariaLabelledBy: 'modal-basic-title' })
-  //       .result.then(
-  //         (result) => {
-  //           this.closeResult.set(`Closed with: ${result}`);
-  //         },
-  //         (reason) => {
-  //           // this.closeResult.set(`Dismissed ${this.getDismissReason(reason)}`);
-  //         }
-  //       );
-  //   }
 }

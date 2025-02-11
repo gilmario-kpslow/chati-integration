@@ -33,13 +33,6 @@ public class PocketBaseService {
         this.client = HttpClient.newHttpClient();
     }
 
-//    @PostConstruct
-//    protected void init() {
-//        RestClientBuilder builder = RestClientBuilder.newBuilder();
-//        client = builder
-//                .baseUri(URI.create(pocketbaseURL))
-//                .build(PocketBaseClientInterface.class);
-//    }
     public LoginResponse getLogin() throws IOException, InterruptedException {
         if (Objects.nonNull(loginResponse)) {
             return loginResponse;
@@ -58,9 +51,23 @@ public class PocketBaseService {
         return loginResponse;
     }
 
-//    public PageResponse<T> listar(String entityName) {
-//        return client.listar(getToken(), entityName);
-//    }
+    public <T extends BaseEntidade> PageResponse<T> listar(String entityName, Class<T> classResponse) throws IOException, InterruptedException {
+
+        HttpRequest request = HttpRequest
+                .newBuilder()
+                .header("Content-Type", MediaType.APPLICATION_JSON)
+                .header("Accept", MediaType.APPLICATION_JSON)
+                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append(entityName).append("/records").toString()))
+                .header("Authorization", getToken())
+                .GET()
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return JsonConverter.fromJsonPage(response.body(), classResponse);
+
+    }
+
     public <T extends BaseEntidade> T create(String entityName, T t, Class<T> classResponse) throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest

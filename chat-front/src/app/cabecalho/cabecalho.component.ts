@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-cabecalho',
-  imports: [NgbDropdownModule],
+  imports: [MatMenuModule, MatButtonModule, MatIconModule],
   templateUrl: './cabecalho.component.html',
   styleUrl: './cabecalho.component.css',
 })

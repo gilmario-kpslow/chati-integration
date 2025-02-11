@@ -1,22 +1,30 @@
-<form [formGroup]="form">
-    <input class="form-control" type="hidden" name="id">
-    <div class="row">
-        <div class="col-md-12 mb-3">
-            <app-input formControlName="titulo" label="Título" placeholder="Título do Evento"></app-input>
+<h2 mat-dialog-title>Criar novo chat</h2>
+<mat-dialog-content>
+
+    <form [formGroup]="form">
+        <input class="form-control" type="hidden" name="id">
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <app-input formControlName="titulo" label="Título" placeholder="Título do Evento"></app-input>
+            </div>
+            <!-- <div class="col-md-12 mb-3">
+                <app-input formControlName="topico" label="Tópico" placeholder="Separar conversa em topicos"></app-input>
+            </div> -->
+            <div class="col-md-12 mb-3">
+                <app-input formControlName="mensagem" label="Mensagem"
+                    placeholder="Texto informado na mensagem"></app-input>
+            </div>
+            <div class="col-md-12 mb-3">
+                <app-input formControlName="url" label="URL" placeholder="URL de notificar"></app-input>
+            </div>
+            <div class="col-md-12 mb-3">
+                <app-select formControlName="cor" label="Tema do Cartão" placeholder="URL de notificar"
+                    [options]="temas"></app-select>
+            </div>
         </div>
-        <!-- <div class="col-md-12 mb-3">
-            <app-input formControlName="topico" label="Tópico" placeholder="Separar conversa em topicos"></app-input>
-        </div> -->
-        <div class="col-md-12 mb-3">
-            <app-input formControlName="mensagem" label="Mensagem"
-                placeholder="Texto informado na mensagem"></app-input>
-        </div>
-        <div class="col-md-12 mb-3">
-            <app-input formControlName="url" label="URL" placeholder="URL de notificar"></app-input>
-        </div>
-        <div class="col-md-12 mb-3">
-            <app-select formControlName="cor" label="Tema do Cartão" placeholder="URL de notificar"
-                [options]="temas"></app-select>
-        </div>
-    </div>
-</form>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button type="button" color="primary" (click)="salvar()">Salvar</button>
+    <button mat-button mat-dialog-close type="button">Fechar</button>
+</mat-dialog-actions>

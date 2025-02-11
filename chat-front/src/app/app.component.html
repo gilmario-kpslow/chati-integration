@@ -1,83 +1,9 @@
 <main class="d-flex flex-column">
-  <app-cabecalho (novo)="open(content)"></app-cabecalho>
+  <app-cabecalho (novo)="openCadastro()" (atualizar)="list.pesquisar();"></app-cabecalho>
   <section class="flex-fill">
     <div class="container-fluid">
-
-      <app-chat-list></app-chat-list>
-
+      <app-chat-list #list></app-chat-list>
     </div>
   </section>
   <app-rodape></app-rodape>
 </main>
-
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
-  </div>
-  <div class="modal-body">
-    <app-chat-cadastro #cadastro></app-chat-cadastro>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-secondary" (click)="cadastro.salvar()">Save</button>
-  </div>
-</ng-template>
-
-<div class="modal fade" id="exampleModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
-  aria-hidden="true">
-  <div class="modal-dialog modal-ls modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Novo Chat</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" data-action="create" data-form="create">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="confirmar" data-bs-backdrop="static" tabindex="-1" aria-labelledby="confirmar"
-  aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Confirmar</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form data-form="delete">
-          Deseja excluir o esse registro?
-          <input class="form-control" type="hidden" name="id">
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-        <button type="button" class="btn btn-success" data-action="delete" data-form="delete">Confirmar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="uploaderModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="uploaderModal"
-  aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Upload</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <input class="form-control" data-action="upload" type="file" name="file">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>

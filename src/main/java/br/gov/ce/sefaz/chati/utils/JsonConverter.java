@@ -1,5 +1,7 @@
 package br.gov.ce.sefaz.chati.utils;
 
+import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.type.CollectionType;
@@ -36,6 +38,16 @@ public class JsonConverter {
             return null;
         }
         return objectMapper.readValue(json, classe);
+    }
+
+    public static PageResponse fromJsonPage(String json, Class classe) throws IOException {
+        if (Objects.isNull(json) || "".equals(json)) {
+
+            return null;
+        }
+
+        JavaType javaType = objectMapper.getTypeFactory().constructParametricType(PageResponse.class, classe);
+        return objectMapper.readValue(json, javaType);
     }
 
     public static String toJson(Object o) throws IOException {

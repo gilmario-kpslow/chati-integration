@@ -1,22 +1,18 @@
 <header>
-    <div class="card">
-        <div class="card-body">
-            <div class="d-flex justify-content">
-                <img class="img-fluid" src="/assets/imagens/logo.svg" width="48" alt="chat-icon logo" />
-                <span class="h3 flex-grow-1 align-self-center m-0"> CHATI - O CHAT CHATO</span>
-                <div ngbDropdown class="d-inline-block">
-                    <button type="button" class="btn btn-default" id="dropdownBasic1" ngbDropdownToggle>
-                        Ações
-                    </button>
-                    <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                        <button ngbDropdownItem type="button" (click)="novoEvent()">Novo</button>
-                        <button ngbDropdownItem type="button" (click)="atualizarEvent()">Atualizar</button>
-                        <button ngbDropdownItem type="button" (click)="downloadBackup()">Download backup</button>
-                        <button ngbDropdownItem type="button" (click)="uploadBackup()">Restore backup</button>
-                        <button ngbDropdownItem type="button" (click)="habilitarNotificacoes()">Notificações</button>
-                    </div>
-                </div>
-            </div>
+    <div class="d-flex justify-content">
+        <img class="img-fluid" src="/assets/imagens/logo.svg" width="48" alt="chat-icon logo" />
+        <span class="h3 flex-grow-1 align-self-center m-0"> CHATI - O CHAT CHATO</span>
+        <div class="d-inline-block">
+            <button mat-mini-fab [matMenuTriggerFor]="menu">
+                <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+                <button type="button" mat-menu-item (click)="novoEvent()">Novo</button>
+                <button type="button" mat-menu-item (click)="atualizarEvent()">Atualizar</button>
+                <button type="button" mat-menu-item (click)="downloadBackup()">Download backup</button>
+                <button type="button" mat-menu-item (click)="uploadBackup()">Restore backup</button>
+                <button type="button" mat-menu-item (click)="habilitarNotificacoes()">Notificações</button>
+            </mat-menu>
         </div>
     </div>
 </header>

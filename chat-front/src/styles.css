@@ -5,3 +5,20 @@ main {
     padding: 0 !important;
     margin: 0 !important;
 }
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    background-color: rgba(0, 50, 150, 0.1);
+}
+
+.text-overflow {
+    text-overflow: ellipsis !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}

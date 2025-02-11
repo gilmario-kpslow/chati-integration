@@ -1,13 +1,11 @@
-<h1>
-  {{config?.mensagem?.titulo}}
-</h1>
-
-<div>
+<h2 mat-dialog-title>{{config?.mensagem?.titulo}}</h2>
+<mat-dialog-content>
   <div>
-    <p class="fw-bold">{{config?.mensagem?.mensagem}}</p>
+    <p>{{config?.mensagem?.mensagem}}</p>
     <p>{{config?.mensagem?.detalhe}}</p>
   </div>
-</div>
-<div>
-  <button class="btn btn-default" class="w-100">Fechar</button>
-</div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close type="button">Fechar</button>
+</mat-dialog-actions>
