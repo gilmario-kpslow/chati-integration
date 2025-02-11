@@ -114,7 +114,7 @@ public class PocketBaseService {
 
     }
 
-    public T getOne(String entityName, String id) {
+    public <T extends BaseEntidade> T getOne(String entityName, Class<T> classResponse, String id) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest
                 .newBuilder()
                 .header("Content-Type", MediaType.APPLICATION_JSON)

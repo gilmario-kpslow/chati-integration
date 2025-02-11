@@ -1,6 +1,7 @@
 package br.gov.ce.sefaz.chati.core;
 
 import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
+import java.io.IOException;
 import java.util.Objects;
 
 /**
@@ -43,11 +44,11 @@ public abstract class GenericService<K extends BaseEntidade> {
         return getDatabaseService().update(registro);
     }
 
-    public void delete(String id) {
+    public void delete(String id) throws IOException, InterruptedException {
         getDatabaseService().delete(id);
     }
 
-    public K getOne(String id) {
+    public K getOne(String id) throws IOException, InterruptedException {
         return getDatabaseService().getOne(id);
     }
 

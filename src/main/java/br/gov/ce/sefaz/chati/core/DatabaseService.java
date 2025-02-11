@@ -32,44 +32,17 @@ public abstract class DatabaseService<T extends BaseEntidade> {
         return pocketBaseService.create(entityName, t, getClassEntity());
     }
 
-//    public T update(T t) {
-//        return client.update(getToken(), entityName, t.getId(), t);
-//    }
-//
-//    public void delete(String id) {
-//        client.delete(getToken(), entityName, id);
-//    }
-//
-//    public T getOne(String id) {
-//        return client.getOne(getToken(), entityName, id);
-//    }
-//
-//    private String getToken() {
-//        return "Bearer " + getLogin().getToken();
-//    }
-//    public PageResponse<T> lista() throws Exception {
-//        return pocketBaseService.listar(entityName);
-//    }
-//
-//    public T save(T entity) throws Exception {
-//        return pocketBaseService.create(entityName, entity);
-//    }
-//
     public T update(T entity) throws Exception {
         return this.pocketBaseService.update(entityName, entity, getClassEntity(), entity.getId());
     }
-//
-//    public void delete(String id) {
-//        pocketBaseService.delete(entityName, id);
-//    }
+
+    public void delete(String id) throws IOException, InterruptedException {
+        pocketBaseService.delete(entityName, id);
+    }
 //
 
-    public T getOne(String id) {
-//        return pocketBaseService.getOne(entityName, id);
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public T getOne(String id) throws IOException, InterruptedException {
+        return pocketBaseService.getOne(entityName, getClassEntity(), id);
     }
 
-    void delete(String id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 }

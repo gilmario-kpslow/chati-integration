@@ -41,7 +41,7 @@ public class GrupoResource {
     @DELETE
     @Path("{id}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public void delete(@PathParam("id") String chave) {
+    public void delete(@PathParam("id") String chave) throws Exception {
         service.delete(chave);
     }
 

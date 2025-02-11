@@ -16,7 +16,7 @@ public class DatabaseGrupoService extends DatabaseService<Grupo> {
 
     @Override
     protected Class<Grupo> getClassEntity() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return Grupo.class;
     }
 
 }

@@ -51,7 +51,7 @@ public class ChatResource {
     @DELETE
     @Path("{chave}")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public void delete(@PathParam("chave") String chave) {
+    public void delete(@PathParam("chave") String chave) throws Exception {
         service.delete(chave);
     }
 
