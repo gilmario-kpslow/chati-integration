@@ -14,6 +14,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { AppService } from '../core/app.service';
+import { WebSocketService } from '../core/websocker';
+import { NotificacaoService } from '../core/notificacao.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -38,6 +40,8 @@ export class ChatListComponent implements OnInit {
   service = inject(ChatService);
   filtro = new FormControl();
   appService = inject(AppService);
+  webSocket = inject(WebSocketService);
+  notificar = inject(NotificacaoService);
 
   ngOnInit(): void {
     this.filtro.valueChanges.pipe(debounceTime(250)).subscribe((v) => {
@@ -48,6 +52,11 @@ export class ChatListComponent implements OnInit {
       this.pesquisar();
     });
     this.pesquisar();
+
+    this.webSocket.getMessages().subscribe((mens) => {
+      console.log(mens);
+      this.notificar.notificar(mens);
+    });
   }
 
   pesquisar() {

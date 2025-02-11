@@ -68,11 +68,4 @@ public class ChatResource {
         service.notificar(chave, values);
     }
 
-//    @POST
-//    @Consumes(value = {MediaType.APPLICATION_JSON})
-//    @Produces(value = {MediaType.APPLICATION_JSON})
-//    @Path("restore")
-//    public void restore(List<ChatRegistro> lista) throws Exception {
-//        service.restoreBackup(lista);
-//    }
 }
