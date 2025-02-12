@@ -92,15 +92,15 @@
 
 FROM node:20.18-alpine AS compilefront
 RUN wget -qO- https://get.pnpm.io/install.sh | ENV="$HOME/.shrc" SHELL="$(which sh)" sh -
-RUN source $HOME/.shrc
-WORKDIR /app
-#COPY --chown=185 . /app
-COPY --chown=185 ./chat-front /app
+COPY --chown=185 . /app
+WORKDIR /app/chat-front
+#COPY --chown=185 chat-front /app
 RUN source $HOME/.shrc && pnpm i && pnpm run build
 
-FROM registry.access.redhat.com/ubi8/openjdk-21:1.20 as compile
+FROM registry.access.redhat.com/ubi8/openjdk-21:1.20 AS compile
 COPY --chown=185 . /app
-COPY --chown=185 --from=compilefront /app/dist/chat-front/ /app/src/resources/META-INF/resources/
+RUN ls && sleep 5
+COPY --chown=185 --from=compilefront /app/chat-front/dist/chat-front/browser /app/src/resources/META-INF/resources
 WORKDIR /app
 RUN --mount=type=cache,sharing=shared,id=m2-cache,target=/home/jboss/.m2,uid=185 mvn clean package -DskipTests
 
