@@ -26,7 +26,6 @@ export class AppComponent {
 
   private modalService = inject(MatDialog);
   private mensagemService = inject(MensagemService);
-  closeResult: WritableSignal<string> = signal('');
 
   openCadastro() {
     this.modalService.open(ChatCadastroComponent, {});

@@ -1,6 +1,7 @@
 package br.gov.ce.sefaz.chati.pocketbase;
 
 import br.gov.ce.sefaz.chati.core.BaseEntidade;
+import br.gov.ce.sefaz.chati.pocketbase.user.LoginUserResponse;
 import br.gov.ce.sefaz.chati.utils.JsonConverter;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.MediaType;
@@ -11,6 +12,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Objects;
 import java.util.logging.Logger;
+import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
@@ -18,6 +20,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
  * @author gilmario
  */
 @ApplicationScoped
+@Getter
 public class PocketBaseService {
 
     private static final String BASE_URL = "/api/collections/";
@@ -27,14 +30,14 @@ public class PocketBaseService {
     private String pocketbaseUsuario;
     @ConfigProperty(name = "app.pocketbase.password")
     private String pocketbaseSenha;
-    private LoginResponse loginResponse;
+    private LoginUserResponse loginResponse;
     private final HttpClient client;
 
     public PocketBaseService() {
         this.client = HttpClient.newHttpClient();
     }
 
-    public LoginResponse getLogin() throws IOException, InterruptedException {
+    public LoginUserResponse getLogin() throws IOException, InterruptedException {
         if (Objects.nonNull(loginResponse)) {
             return loginResponse;
         }
@@ -43,15 +46,36 @@ public class PocketBaseService {
                 .newBuilder()
                 .header("Content-Type", MediaType.APPLICATION_JSON)
                 .header("Accept", MediaType.APPLICATION_JSON)
-                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append("_superusers/auth-with-password").toString()))
+                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append("_pb_users_auth_/auth-with-password").toString()))
                 .POST(HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(new LoginRequest(pocketbaseUsuario, pocketbaseSenha))))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        loginResponse = JsonConverter.fromJson(response.body(), LoginResponse.class);
+        System.out.println(response.body());
+
+        loginResponse = JsonConverter.fromJson(response.body(), LoginUserResponse.class);
 
         return loginResponse;
     }
+
+//    public LoginResponse getLogin() throws IOException, InterruptedException {
+//        if (Objects.nonNull(loginResponse)) {
+//            return loginResponse;
+//        }
+//        LOG.info("Efetuando login");
+//        HttpRequest request = HttpRequest
+//                .newBuilder()
+//                .header("Content-Type", MediaType.APPLICATION_JSON)
+//                .header("Accept", MediaType.APPLICATION_JSON)
+//                .uri(URI.create(new StringBuilder(pocketbaseURL).append(BASE_URL).append("_superusers/auth-with-password").toString()))
+//                .POST(HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(new LoginRequest(pocketbaseUsuario, pocketbaseSenha))))
+//                .build();
+//
+//        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+//        loginResponse = JsonConverter.fromJson(response.body(), LoginResponse.class);
+//
+//        return loginResponse;
+//    }
     private static final Logger LOG = Logger.getLogger(PocketBaseService.class.getName());
 
     public <T extends BaseEntidade> PageResponse<T> listar(String entityName, Class<T> classResponse) throws IOException, InterruptedException {
@@ -66,6 +90,8 @@ public class PocketBaseService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println(response);
 
         return JsonConverter.fromJsonPage(response.body(), classResponse);
 

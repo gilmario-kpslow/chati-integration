@@ -16,6 +16,7 @@ import { debounceTime } from 'rxjs';
 import { AppService } from '../core/app.service';
 import { WebSocketService } from '../core/websocker';
 import { NotificacaoService } from '../core/notificacao.service';
+import { UserService } from '../core/user.service';
 
 @Component({
   selector: 'app-chat-list',
@@ -43,6 +44,8 @@ export class ChatListComponent implements OnInit {
   webSocket = inject(WebSocketService);
   notificar = inject(NotificacaoService);
 
+  userService = inject(UserService);
+
   ngOnInit(): void {
     this.filtro.valueChanges.pipe(debounceTime(250)).subscribe((v) => {
       this.filtrar();
@@ -55,7 +58,7 @@ export class ChatListComponent implements OnInit {
 
     this.webSocket.getMessages().subscribe((mens) => {
       console.log(mens);
-      this.notificar.notificar(mens);
+      this.notificar.notificar(mens.text);
     });
   }
 
@@ -76,5 +79,15 @@ export class ChatListComponent implements OnInit {
 
   limpar() {
     this.filtro.reset();
+  }
+
+  teste() {
+    this.userService.listar().subscribe(lista => {
+      console.log(lista);
+    })
+
+    this.userService.login().subscribe(lista => {
+      console.log(lista);
+    })
   }
 }

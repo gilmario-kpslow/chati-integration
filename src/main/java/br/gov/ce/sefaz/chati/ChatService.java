@@ -4,7 +4,7 @@ import br.gov.ce.sefaz.chati.core.DatabaseService;
 import br.gov.ce.sefaz.chati.core.GenericService;
 import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedMap;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
  *
  * @author gilmario
  */
-@ApplicationScoped
+@RequestScoped
 public class ChatService extends GenericService<ChatRegistro> {
 
     @Inject

@@ -12,7 +12,7 @@ import java.io.IOException;
  */
 public abstract class DatabaseService<T extends BaseEntidade> {
 
-    private final String entityName;
+    protected final String entityName;
 
     @Inject
     PocketBaseService pocketBaseService;
@@ -45,4 +45,7 @@ public abstract class DatabaseService<T extends BaseEntidade> {
         return pocketBaseService.getOne(entityName, getClassEntity(), id);
     }
 
+    protected PocketBaseService getPocketService() {
+        return pocketBaseService;
+    }
 }

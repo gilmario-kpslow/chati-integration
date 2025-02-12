@@ -1,5 +1,7 @@
 package br.gov.ce.sefaz.chati.websocket;
 
+import br.gov.ce.sefaz.Mensagem;
+import br.gov.ce.sefaz.chati.utils.JsonConverter;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnError;
@@ -9,14 +11,17 @@ import jakarta.websocket.SendResult;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.PathParam;
 import jakarta.websocket.server.ServerEndpoint;
+import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author gilmario
  */
-@ServerEndpoint("/chat/{username}")
+@ServerEndpoint(value = "/chat/{username}")
 @ApplicationScoped
 public class ChatSocket {
 
@@ -47,11 +52,15 @@ public class ChatSocket {
 
     public void broadcast(String message) {
         sessions.values().forEach((Session s) -> {
-            s.getAsyncRemote().sendText(message, (SendResult result) -> {
-                if (result.getException() != null) {
-                    System.out.println("Unable to send message: " + result.getException());
-                }
-            });
+            try {
+                s.getAsyncRemote().sendObject(JsonConverter.toJson(new Mensagem(message)), (SendResult result) -> {
+                    if (result.getException() != null) {
+                        System.out.println("Unable to send message: " + result.getException());
+                    }
+                });
+            } catch (IOException ex) {
+                Logger.getLogger(ChatSocket.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
     }
 
