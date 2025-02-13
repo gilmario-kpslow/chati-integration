@@ -44,8 +44,8 @@ public class ChatSocket {
     }
 
     @OnMessage
-    public void onMessage(Comando message, @PathParam("username") String username) {
-        broadcast(message);
+    public void onMessage(String message, @PathParam("username") String username) {
+        broadcast(Comando.builder().comando("mensagem").mensagem(message).build());
     }
 
     public void broadcast(Comando message) {
