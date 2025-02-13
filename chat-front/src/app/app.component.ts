@@ -1,8 +1,6 @@
 import {
   Component,
   inject,
-  signal,
-  WritableSignal,
 } from '@angular/core';
 import { CabecalhoComponent } from './cabecalho/cabecalho.component';
 import { RodapeComponent } from './rodape/rodape.component';

@@ -39,7 +39,6 @@ public abstract class DatabaseService<T extends BaseEntidade> {
     public void delete(String id) throws IOException, InterruptedException {
         pocketBaseService.delete(entityName, id);
     }
-//
 
     public T getOne(String id) throws IOException, InterruptedException {
         return pocketBaseService.getOne(entityName, getClassEntity(), id);

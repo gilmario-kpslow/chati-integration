@@ -10,6 +10,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.rmi.server.ExportException;
 import java.util.Objects;
 import java.util.logging.Logger;
 import lombok.Getter;
@@ -31,6 +32,7 @@ public class PocketBaseService {
     @ConfigProperty(name = "app.pocketbase.password")
     private String pocketbaseSenha;
     private LoginUserResponse loginResponse;
+//    private LoginResponse loginResponse;
     private final HttpClient client;
 
     public PocketBaseService() {
@@ -51,13 +53,15 @@ public class PocketBaseService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        System.out.println(response.body());
+
+        if (response.statusCode() != 200) {
+            throw new ExportException(response.body());
+        }
 
         loginResponse = JsonConverter.fromJson(response.body(), LoginUserResponse.class);
 
         return loginResponse;
     }
-
 //    public LoginResponse getLogin() throws IOException, InterruptedException {
 //        if (Objects.nonNull(loginResponse)) {
 //            return loginResponse;
@@ -91,10 +95,14 @@ public class PocketBaseService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-        System.out.println(response);
+        if (response.statusCode() != 200) {
+            throw new ExportException(response.body());
+        }
+
+        System.out.println(response.body());
+        System.out.println(response.statusCode());
 
         return JsonConverter.fromJsonPage(response.body(), classResponse);
-
     }
 
     public <T extends BaseEntidade> T create(String entityName, T t, Class<T> classResponse) throws IOException, InterruptedException {
@@ -109,6 +117,10 @@ public class PocketBaseService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new ExportException(response.body());
+        }
 
         return JsonConverter.fromJson(response.body(), classResponse);
     }
@@ -126,6 +138,9 @@ public class PocketBaseService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+        if (response.statusCode() != 200) {
+            throw new ExportException(response.body());
+        }
         return JsonConverter.fromJson(response.body(), classResponse);
     }
 
@@ -141,6 +156,9 @@ public class PocketBaseService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+        if (response.statusCode() != 204) {
+            throw new ExportException(response.body());
+        }
     }
 
     public <T extends BaseEntidade> T getOne(String entityName, Class<T> classResponse, String id) throws IOException, InterruptedException {
@@ -155,6 +173,9 @@ public class PocketBaseService {
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
+        if (response.statusCode() != 200) {
+            throw new ExportException(response.body());
+        }
         return JsonConverter.fromJson(response.body(), classResponse);
 
     }

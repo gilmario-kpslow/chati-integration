@@ -3,6 +3,6 @@
 
 #docker build -f src/main/docker/Dockerfile.jvm -t chat-integracao:latest .
 
-docker build -f src/main/docker/Dockerfile.jvm -t registry.gilmariosoftware.com.br/chat-integracao:2.0.0 .
+docker build --no-cache -f src/main/docker/Dockerfile.jvm -t registry.gilmariosoftware.com.br/chat-integracao:latest .
 
-# docker tag registry.gilmariosoftware.com.br/chat-integracao:latest registry.gilmariosoftware.com.br/chat-integracao:2.0.0
+#docker tag registry.gilmariosoftware.com.br/chat-integracao:2.0.0 registry.gilmariosoftware.com.br/chat-integracao:latest
