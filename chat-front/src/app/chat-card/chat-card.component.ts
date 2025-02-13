@@ -16,6 +16,8 @@ import { ChatCadastroComponent } from '../chat-cadastro/chat-cadastro.component'
 import { MensagemService } from '../mensagens/messagem.service';
 import { PerguntaComponent } from '../pergunta/pergunta.component';
 import { AppService } from '../core/app.service';
+import { getHost } from '../core/host-resolve';
+import { ChatViewComponent } from '../chat-view/chat-view.component';
 
 @Component({
   selector: 'app-chat-card',
@@ -39,7 +41,6 @@ export class ChatCardComponent {
   mensagemService = inject(MensagemService);
   dialog = inject(MatDialog);
   @Input() chat?: Chat;
-  expande = false;
   appService = inject(AppService);
 
   editar() {
@@ -101,5 +102,17 @@ export class ChatCardComponent {
     return `?${infos
       .map((a) => a.replace('$', '').replace('{', '').replace('}', ''))
       .reduce((a, b) => `${a}=teste&${b}`)}`;
+  }
+
+  getUrl() {
+    return `${getHost()}registro/executar/${this.chat?.chave}`;
+  }
+
+  ver() {
+    this.dialog
+      .open(ChatViewComponent, {
+        data: this.chat,
+        width: `50%`
+      });
   }
 }

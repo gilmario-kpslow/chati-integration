@@ -22,3 +22,94 @@ body {
     overflow: hidden !important;
     white-space: nowrap !important;
 }
+
+.tema-verde {
+    border-left: solid green 8px !important;
+}
+
+.tema-verde:hover {
+    background-color: rgba(0, 255, 0, 0.1) !important;
+}
+
+
+.tema-verde .header {
+    border-bottom: solid green 3px !important;
+}
+
+.tema-vermelho {
+    border-left: solid red 8px !important;
+}
+
+.tema-vermelho:hover {
+    background-color: rgba(255, 0, 0, 0.1) !important;
+}
+
+
+.tema-vermelho .header {
+    border-bottom: solid red 3px !important;
+}
+
+.tema-amarelo {
+    border-left: solid yellow 8px !important;
+}
+
+.tema-amarelo:hover {
+    background-color: rgba(255, 251, 0, 0.1) !important;
+}
+
+
+.tema-amarelo .header {
+    border-bottom: solid yellow 3px !important;
+}
+
+.tema-azul {
+    border-left: solid blue 8px !important;
+}
+
+.tema-azul:hover {
+    background-color: rgba(0, 0, 0255, 0.1) !important;
+}
+
+
+.tema-azul .header {
+    border-bottom: solid blue 3px !important;
+}
+
+.tema-fuscia {
+    border-left: solid rgb(255, 0, 255) 8px !important;
+}
+
+.tema-fuscia:hover {
+    background-color: rgba(255, 0, 255, 0.1) !important;
+}
+
+
+.tema-fuscia .header {
+    border-bottom: solid rgb(255, 0, 255) 3px !important;
+}
+
+.tema-ciano {
+    border-left: solid rgb(3, 168, 233) 8px !important;
+}
+
+.tema-ciano:hover {
+    background-color: rgba(3, 168, 233, 0.1) !important;
+}
+
+
+.tema-ciano .header {
+    border-bottom: solid rgb(3, 168, 233) 3px !important;
+}
+
+.tema-dark {
+    border-left: solid rgb(0, 0, 0) 8px !important;
+}
+
+.tema-dark:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+
+.tema-dark .header {
+    border-bottom: solid rgb(0, 0, 0) 3px !important;
+}

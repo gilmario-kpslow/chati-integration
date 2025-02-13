@@ -1,44 +1,42 @@
 <mat-card appearance="outlined" class="mb-3" [ngClass]="chat?.cor">
     <mat-card-header>
         <div class="d-flex justify-content-between w-100 header">
-            <mat-card-title class="flex-grow-1" [ngClass]="{'text-overflow': !expande}">{{chat?.titulo}}
+            <mat-card-title class="text-overflow">{{chat?.titulo}}
             </mat-card-title>
             <div class="d-flex">
                 <button mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
-                <button type="button" mat-icon-button *ngIf="!expande"
-                    (click)="expande = !expande"><mat-icon>expand_more</mat-icon> </button>
-                <button type="button" mat-icon-button *ngIf="expande"
-                    (click)="expande = !expande"><mat-icon>expand_less</mat-icon> </button>
+                <button type="button" mat-icon-button (click)="ver()"><mat-icon>visibility</mat-icon> </button>
                 <mat-menu #menu="matMenu">
                     <button type="button" mat-menu-item (click)="editar()">Editar</button>
                     <button type="button" mat-menu-item (click)="excluir()">Excluir</button>
                     <button type="button" mat-menu-item (click)="testar()">Executar teste</button>
                     <button type="button" mat-menu-item (click)="nofiticar()">Notificar a si mesmo</button>
-
                 </mat-menu>
-
             </div>
         </div>
     </mat-card-header>
     <mat-card-content>
         <div>
-            <div class="mb-2 py-2" *ngIf="expande">
+            <div class="mb-2 py-2">
                 <div class="fw-bold"> Mensagem</div>
-                <div [ngClass]="{'text-overflow': !expande}">
+                <div class="text-overflow">
                     {{chat?.mensagem}}
                 </div>
             </div>
             <div class="mt-2">
                 <div class="fw-bold">URL</div>
-                <div [ngClass]="{'text-overflow': !expande}">
+                <div class="text-overflow">
                     {{chat?.url}}
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="fw-bold">CHAMADA</div>
+                <div class="text-overflow">
+                    {{getUrl()}}
                 </div>
             </div>
         </div>
     </mat-card-content>
-    <!-- <mat-card-footer class="example-card-footer">
-
-    </mat-card-footer> -->
 </mat-card>

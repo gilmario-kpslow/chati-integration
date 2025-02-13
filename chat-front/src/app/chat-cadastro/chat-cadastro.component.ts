@@ -67,6 +67,7 @@ export class ChatCadastroComponent implements OnInit {
     'tema-amarelo',
     'tema-ciano',
     'tema-fuscia',
+    'tema-dark',
   ];
 
   salvar() {

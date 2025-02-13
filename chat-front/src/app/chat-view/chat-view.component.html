@@ -1,0 +1,31 @@
+<div [ngClass]="chat.cor">
+    <h2 mat-dialog-title>{{chat.titulo}}</h2>
+    <mat-dialog-content>
+        <div>
+            <div class="mb-2 py-2">
+                <div class="fw-bold"> Mensagem</div>
+                <div>
+                    {{chat.mensagem}}
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="fw-bold">URL</div>
+                <div>
+                    {{chat.url}}
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="d-flex justify-content-between">
+                    <div class="fw-bold">CHAMADA</div>
+                    <!-- <button type="button" mat-icon-button><mat-icon>content_copy</mat-icon> </button> -->
+                </div>
+                <div>
+                    {{getUrl()}}
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-button mat-dialog-close type="button">Fechar</button>
+    </mat-dialog-actions>
+</div>
