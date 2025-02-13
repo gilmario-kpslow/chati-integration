@@ -2,10 +2,8 @@
   <mat-card-header>
     <mat-card-title>
       Filtrar Chats
-
       <hr>
     </mat-card-title>
-
   </mat-card-header>
   <mat-card-content>
     <div class="row mb-3">
@@ -14,6 +12,9 @@
         <div class="d-flex">
           <input class="form-control" type="text" id="filtro" name="filtro" [formControl]="filtro"
             placeholder="Digite algo para filtrar" />
+          <button mat-flat-button type="button" (click)="pesquisar()">
+            <mat-icon>search</mat-icon> Pesquisar
+          </button>
           <button mat-flat-button type="button" (click)="limpar()">
             <mat-icon>delete</mat-icon> Limpar
           </button>
