@@ -9,7 +9,7 @@ import { Chat } from './chat.model';
 export class ChatService {
   private http = inject(HttpClient);
 
-  private url = environment.url;
+  private url = location.href;
 
   save(obj: any) {
     return this.http.post(`${this.url}/registro`, obj);

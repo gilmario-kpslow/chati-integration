@@ -80,14 +80,4 @@ export class ChatListComponent implements OnInit {
   limpar() {
     this.filtro.reset();
   }
-
-  teste() {
-    this.userService.listar().subscribe(lista => {
-      console.log(lista);
-    })
-
-    this.userService.login().subscribe(lista => {
-      console.log(lista);
-    })
-  }
 }
