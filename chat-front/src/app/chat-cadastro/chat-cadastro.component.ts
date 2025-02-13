@@ -20,7 +20,6 @@ import {
   MatDialogTitle,
 } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { Chat } from '../core/chat.model';
 import { AppService } from '../core/app.service';
 
 @Component({

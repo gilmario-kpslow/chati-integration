@@ -60,7 +60,7 @@ export class ChatCardComponent {
           if (!this.chat) {
             return;
           }
-          this.service.delete(this.chat?.id).subscribe(() => {
+          this.service.delete(this.chat?.chave).subscribe(() => {
             this.mensagemService.sucesso('Registro excluído com sucesso!');
             this.appService.notificarChats();
           });

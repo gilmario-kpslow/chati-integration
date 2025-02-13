@@ -5,5 +5,5 @@ export interface Chat extends Entity {
   mensagem: string;
   url: string;
   cor: string;
-  topico: string;
+  chave: string;
 }

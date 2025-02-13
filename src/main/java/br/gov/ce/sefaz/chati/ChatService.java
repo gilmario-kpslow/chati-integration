@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,18 +68,15 @@ public class ChatService extends GenericService<ChatRegistro> {
     }
 
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
-        ChatRegistro dto = getOne(chave);
+        ChatRegistro dto = lista().getItems().stream().filter(a -> a.getChave().equals(chave)).findFirst().get();
         String mesagem = this.convertMessage(dto.getMensagem(), values);
-        chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Executando notificaçã" + dto.getTitulo()).build());
         executor.executar(dto.getUrl(), mesagem);
+        chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Executando notificação " + dto.getTitulo()).build());
     }
 
     @Override
     protected ChatRegistro save(ChatRegistro registro) throws Exception {
-        chatSocket.broadcast(Comando.builder().comando("mensagem").mensagem("Registro salvo").build());
-        if (Objects.isNull(registro.getCor())) {
-            registro.setCor("#003399");
-        }
+        registro.setChave(UUID.randomUUID().toString());
         return super.save(registro);
     }
 

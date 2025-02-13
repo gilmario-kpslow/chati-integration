@@ -6,12 +6,15 @@ import br.gov.ce.sefaz.chati.utils.JsonConverter;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.ProxySelector;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.rmi.server.ExportException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.logging.Logger;
 import lombok.Getter;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -33,10 +36,15 @@ public class PocketBaseService {
     private String pocketbaseSenha;
     private LoginUserResponse loginResponse;
 //    private LoginResponse loginResponse;
-    private final HttpClient client;
+    private HttpClient client;
+
+    @ConfigProperty(name = "proxy.host")
+    Optional<String> proxyHost;
+    @ConfigProperty(name = "proxy.port")
+    Optional<Integer> proxyPort;
 
     public PocketBaseService() {
-        this.client = HttpClient.newHttpClient();
+
     }
 
     public LoginUserResponse getLogin() throws IOException, InterruptedException {
@@ -44,6 +52,7 @@ public class PocketBaseService {
             return loginResponse;
         }
         LOG.info("Efetuando login");
+
         HttpRequest request = HttpRequest
                 .newBuilder()
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -52,7 +61,7 @@ public class PocketBaseService {
                 .POST(HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(new LoginRequest(pocketbaseUsuario, pocketbaseSenha))))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new ExportException(response.body());
@@ -93,7 +102,7 @@ public class PocketBaseService {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new ExportException(response.body());
@@ -116,7 +125,7 @@ public class PocketBaseService {
                 .POST(HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(t)))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new ExportException(response.body());
@@ -136,7 +145,7 @@ public class PocketBaseService {
                 .method("PATCH", HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(t)))
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new ExportException(response.body());
@@ -154,7 +163,7 @@ public class PocketBaseService {
                 .DELETE()
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 204) {
             throw new ExportException(response.body());
@@ -171,7 +180,7 @@ public class PocketBaseService {
                 .GET()
                 .build();
 
-        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = getClient().send(request, HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new ExportException(response.body());
@@ -182,5 +191,16 @@ public class PocketBaseService {
 
     private String getToken() throws IOException, InterruptedException {
         return "Bearer " + getLogin().getToken();
+    }
+
+    HttpClient getClient() {
+        if (Objects.isNull(client)) {
+            if (proxyHost.isPresent() && proxyPort.isPresent()) {
+                this.client = HttpClient.newBuilder().proxy(ProxySelector.of(new InetSocketAddress(proxyHost.get(), proxyPort.get()))).build();
+            } else {
+                this.client = HttpClient.newHttpClient();
+            }
+        }
+        return client;
     }
 }

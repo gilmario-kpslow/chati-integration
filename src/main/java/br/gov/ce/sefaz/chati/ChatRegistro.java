@@ -20,6 +20,6 @@ public class ChatRegistro extends BaseEntidade {
     private String mensagem;
     private String url;
     private String cor;
-    private String topico;
+    private String chave;
 
 }

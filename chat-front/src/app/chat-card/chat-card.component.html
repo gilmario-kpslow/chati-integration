@@ -1,11 +1,16 @@
 <mat-card appearance="outlined" class="mb-3" [ngClass]="chat?.cor">
     <mat-card-header>
-        <div class="d-flex justify-content-between align-items-center w-100 header">
-            <mat-card-title> {{chat?.titulo}}</mat-card-title>
-            <div>
+        <div class="d-flex justify-content-between w-100 header">
+            <mat-card-title class="flex-grow-1" [ngClass]="{'text-overflow': !expande}">{{chat?.titulo}}
+            </mat-card-title>
+            <div class="d-flex">
                 <button mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
+                <button type="button" mat-icon-button *ngIf="!expande"
+                    (click)="expande = !expande"><mat-icon>expand_more</mat-icon> </button>
+                <button type="button" mat-icon-button *ngIf="expande"
+                    (click)="expande = !expande"><mat-icon>expand_less</mat-icon> </button>
                 <mat-menu #menu="matMenu">
                     <button type="button" mat-menu-item (click)="editar()">Editar</button>
                     <button type="button" mat-menu-item (click)="excluir()">Excluir</button>
@@ -13,10 +18,6 @@
                     <button type="button" mat-menu-item (click)="nofiticar()">Notificar a si mesmo</button>
 
                 </mat-menu>
-                <button type="button" mat-icon-button *ngIf="!expande"
-                    (click)="expande = !expande"><mat-icon>expand_more</mat-icon> </button>
-                <button type="button" mat-icon-button *ngIf="expande"
-                    (click)="expande = !expande"><mat-icon>expand_less</mat-icon> </button>
 
             </div>
         </div>
