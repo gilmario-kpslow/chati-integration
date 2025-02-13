@@ -4,9 +4,11 @@ import br.gov.ce.sefaz.chati.core.DatabaseService;
 import br.gov.ce.sefaz.chati.core.GenericService;
 import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
+import br.gov.ce.sefaz.chati.websocket.Comando;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedMap;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,6 +30,19 @@ public class ChatService extends GenericService<ChatRegistro> {
 
     @Inject
     ChatSocket chatSocket;
+
+    @Override
+    public ChatRegistro saveOrUpdate(ChatRegistro registro) throws Exception {
+        var resp = super.saveOrUpdate(registro);
+        chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Salvar ou atualizar").build());
+        return resp;
+    }
+
+    @Override
+    public void delete(String id) throws IOException, InterruptedException {
+        super.delete(id);
+        chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Deletar").build());
+    }
 
     @Override
     protected void validar(ChatRegistro registro) {
@@ -54,14 +69,13 @@ public class ChatService extends GenericService<ChatRegistro> {
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
         ChatRegistro dto = getOne(chave);
         String mesagem = this.convertMessage(dto.getMensagem(), values);
-        chatSocket.broadcast("Executando notificação!" + dto.getTitulo());
+        chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Executando notificaçã" + dto.getTitulo()).build());
         executor.executar(dto.getUrl(), mesagem);
     }
 
     @Override
     protected ChatRegistro save(ChatRegistro registro) throws Exception {
-        chatSocket.broadcast("Registro Salvo!");
-//        registro.setId(UUID.randomUUID().toString());
+        chatSocket.broadcast(Comando.builder().comando("mensagem").mensagem("Registro salvo").build());
         if (Objects.isNull(registro.getCor())) {
             registro.setCor("#003399");
         }
@@ -81,7 +95,7 @@ public class ChatService extends GenericService<ChatRegistro> {
     public void notificar(String chave, MultivaluedMap<String, String> values) throws Exception {
         ChatRegistro dto = getOne(chave);
         String mesagem = this.convertMessage(dto.getMensagem(), values);
-        chatSocket.broadcast(mesagem);
+        chatSocket.broadcast(Comando.builder().comando("mensagem").mensagem(mesagem).build());
     }
 
     private String convertMessage(String mensagem, MultivaluedMap<String, String> values) {

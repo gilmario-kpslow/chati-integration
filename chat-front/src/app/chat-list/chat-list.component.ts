@@ -14,7 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { AppService } from '../core/app.service';
-import { WebSocketService } from '../core/websocker';
+import { WebSocketService } from '../core/websocket/websocker';
 import { NotificacaoService } from '../core/notificacao.service';
 import { UserService } from '../core/user.service';
 
@@ -57,8 +57,11 @@ export class ChatListComponent implements OnInit {
     this.pesquisar();
 
     this.webSocket.getMessages().subscribe((mens) => {
-      console.log(mens);
-      this.notificar.notificar(mens.text);
+      // console.log(mens);
+      // this.notificar.notificar(mens.mensagem);\
+      if (mens.comando == 'pesquisar') {
+        this.pesquisar();
+      }
     });
   }
 
