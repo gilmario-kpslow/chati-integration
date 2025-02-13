@@ -35,7 +35,6 @@ public class PocketBaseService {
     @ConfigProperty(name = "app.pocketbase.password")
     private String pocketbaseSenha;
     private LoginUserResponse loginResponse;
-//    private LoginResponse loginResponse;
     private HttpClient client;
 
     @ConfigProperty(name = "proxy.host")
@@ -43,16 +42,10 @@ public class PocketBaseService {
     @ConfigProperty(name = "proxy.port")
     Optional<Integer> proxyPort;
 
-    public PocketBaseService() {
-
-    }
-
     public LoginUserResponse getLogin() throws IOException, InterruptedException {
         if (Objects.nonNull(loginResponse)) {
             return loginResponse;
         }
-        LOG.info("Efetuando login");
-
         HttpRequest request = HttpRequest
                 .newBuilder()
                 .header("Content-Type", MediaType.APPLICATION_JSON)
@@ -107,9 +100,6 @@ public class PocketBaseService {
         if (response.statusCode() != 200) {
             throw new ExportException(response.body());
         }
-
-        System.out.println(response.body());
-        System.out.println(response.statusCode());
 
         return JsonConverter.fromJsonPage(response.body(), classResponse);
     }
