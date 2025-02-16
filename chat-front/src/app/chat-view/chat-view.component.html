@@ -9,23 +9,44 @@
                 </div>
             </div>
             <div class="mt-2">
+                <div class="d-flex justify-content-between ">
+                    <div class="fw-bold">PROVEDOR</div>
+                    <!-- <button type="button" mat-icon-button><mat-icon>content_copy</mat-icon> </button> -->
+                </div>
+                <div>
+                    {{chat.provider}}
+                </div>
+            </div>
+            <div class="mt-2">
+                <div class="d-flex justify-content-between">
+                    <div class="fw-bold">STATUS</div>
+                </div>
+                <div>
+                    {{chat.ativo? 'Ativo':'Inativo'}}
+                </div>
+            </div>
+            <div class="mt-2">
                 <div class="fw-bold">URL</div>
                 <div>
-                    {{chat.url}}
+                    <code>
+                        {{chat.url}}
+                    </code>
                 </div>
             </div>
             <div class="mt-2">
                 <div class="d-flex justify-content-between">
                     <div class="fw-bold">CHAMADA</div>
-                    <!-- <button type="button" mat-icon-button><mat-icon>content_copy</mat-icon> </button> -->
                 </div>
                 <div>
-                    {{getUrl()}}
+                    <code>
+                        {{getUrl()}}
+                    </code>
                 </div>
             </div>
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
+        <!-- <mat-slide-toggle class="example-margin" [formControl]="ativo"> Ativo </mat-slide-toggle> -->
         <button mat-button mat-dialog-close type="button">Fechar</button>
     </mat-dialog-actions>
 </div>

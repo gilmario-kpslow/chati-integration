@@ -7,6 +7,9 @@ import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, Ma
 import { Chat } from '../core/chat.model';
 import { AppService } from '../core/app.service';
 import { getHost } from '../core/host-resolve';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NotificacaoService } from '../core/notificacao.service';
 
 @Component({
   selector: 'app-chat-view',
@@ -18,6 +21,8 @@ import { getHost } from '../core/host-resolve';
     MatDialogActions,
     MatDialogClose,
     MatButtonModule,
+    MatSlideToggleModule,
+    ReactiveFormsModule
   ],
   templateUrl: './chat-view.component.html',
   styleUrl: './chat-view.component.css'
@@ -29,9 +34,25 @@ export class ChatViewComponent {
   dialogRef = inject(MatDialogRef);
   chat = inject<Chat>(MAT_DIALOG_DATA);
   appService = inject(AppService);
+  notificacao = inject(NotificacaoService);
 
   getUrl() {
     return `${getHost()}registro/executar/${this.chat.chave}`;
+  }
+
+  ativo = new FormControl();
+
+  ngOnInit(): void {
+    this.ativo.patchValue(this.chat?.ativo);
+    this.ativo.valueChanges.subscribe(a => {
+      if (!this.chat) {
+        return;
+      }
+      this.service.ativar(this.chat.id).subscribe(() => {
+        this.chat.ativo = a;
+        this.notificacao.notificar(`Registro ${a ? 'ativado' : 'Desativado'}`);
+      });
+    });
   }
 
 }

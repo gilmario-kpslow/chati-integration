@@ -12,7 +12,7 @@ import { ChatService } from '../core/chat.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime } from 'rxjs';
+import { Subscription, debounceTime } from 'rxjs';
 import { AppService } from '../core/app.service';
 import { WebSocketService } from '../core/websocket/websocker';
 import { NotificacaoService } from '../core/notificacao.service';
@@ -43,10 +43,17 @@ export class ChatListComponent implements OnInit {
   appService = inject(AppService);
   webSocket = inject(WebSocketService);
   notificar = inject(NotificacaoService);
+  subs?: Subscription;
 
   userService = inject(UserService);
 
   ngOnInit(): void {
+
+    this.webSocket.event.subscribe(() => {
+      this.subs?.unsubscribe();
+
+      this.initSocket();
+    });
     this.filtro.valueChanges.pipe(debounceTime(250)).subscribe((v) => {
       this.filtrar();
     });
@@ -54,21 +61,27 @@ export class ChatListComponent implements OnInit {
     this.appService.mudouChats.subscribe(() => {
       this.pesquisar();
     });
-    this.pesquisar();
 
-    this.webSocket.getMessages().subscribe((mens) => {
-      // console.log(mens);
-      // this.notificar.notificar(mens.mensagem);\
-      if (mens.comando == 'pesquisar') {
-        this.pesquisar();
-      }
-    });
+    this.pesquisar();
+    this.initSocket();
   }
 
   pesquisar() {
     this.service.listar().subscribe((lista) => {
       this.chats = lista.items;
       this.filtrar();
+    });
+  }
+
+  initSocket() {
+    this.subs = this.webSocket.getMessages().subscribe((mens) => {
+      console.log(mens);
+      if (mens.comando == 'pesquisar') {
+        this.pesquisar();
+      }
+      if (mens.comando == 'mensagem') {
+        this.notificar.notificar(mens.mensagem);
+      }
     });
   }
 

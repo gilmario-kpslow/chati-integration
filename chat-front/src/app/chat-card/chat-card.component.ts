@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, signal } from '@angular/core';
 import { Chat } from '../core/chat.model';
 import { CommonModule } from '@angular/common';
 import {
@@ -18,6 +18,9 @@ import { PerguntaComponent } from '../pergunta/pergunta.component';
 import { AppService } from '../core/app.service';
 import { getHost } from '../core/host-resolve';
 import { ChatViewComponent } from '../chat-view/chat-view.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { NotificacaoService } from '../core/notificacao.service';
 
 @Component({
   selector: 'app-chat-card',
@@ -32,16 +35,37 @@ import { ChatViewComponent } from '../chat-view/chat-view.component';
     MatMenuTrigger,
     MatIcon,
     MatMenuItem,
+    MatSlideToggleModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './chat-card.component.html',
   styleUrl: './chat-card.component.css',
 })
-export class ChatCardComponent {
+export class ChatCardComponent implements OnInit {
   service = inject(ChatService);
   mensagemService = inject(MensagemService);
   dialog = inject(MatDialog);
   @Input() chat?: Chat;
   appService = inject(AppService);
+  notificacao = inject(NotificacaoService);
+  ativo = new FormControl();
+
+  ngOnInit(): void {
+    this.ativo.patchValue(this.chat?.ativo);
+    this.ativo.valueChanges.subscribe(a => {
+      if (!this.chat) {
+        return;
+      }
+      this.service.ativar(this.chat.id).subscribe(() => {
+        if (!this.chat) {
+          return;
+        }
+        this.chat.ativo = a;
+        this.notificacao.notificar(`Registro ${a ? 'ativado' : 'Desativado'}`);
+      });
+    });
+  }
+
 
   editar() {
     this.dialog.open(ChatCadastroComponent, { data: this.chat });
@@ -61,7 +85,7 @@ export class ChatCardComponent {
           if (!this.chat) {
             return;
           }
-          this.service.delete(this.chat?.chave).subscribe(() => {
+          this.service.delete(this.chat?.id).subscribe(() => {
             this.mensagemService.sucesso('Registro excluído com sucesso!');
             this.appService.notificarChats();
           });
@@ -75,10 +99,8 @@ export class ChatCardComponent {
     }
 
     this.service
-      .executar(this.chat.id, this.extractParametros(this.chat.mensagem))
-      .subscribe(() => {
-        this.mensagemService.sucesso('Notificação enviada!');
-      });
+      .executar(this.chat.chave, this.extractParametros(this.chat.mensagem))
+      .subscribe();
   }
 
   nofiticar() {
@@ -88,9 +110,7 @@ export class ChatCardComponent {
 
     this.service
       .notificar(this.chat.id, this.extractParametros(this.chat.mensagem))
-      .subscribe(() => {
-        this.mensagemService.sucesso('Notificação enviada!');
-      });
+      .subscribe();
   }
 
   extractParametros(mensagem: string) {

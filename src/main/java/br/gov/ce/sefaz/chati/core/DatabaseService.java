@@ -12,36 +12,32 @@ import java.io.IOException;
  */
 public abstract class DatabaseService<T extends BaseEntidade> {
 
-    protected final String entityName;
-
     @Inject
     PocketBaseService pocketBaseService;
 
-    public DatabaseService(String entity) {
-        this.entityName = entity;
-    }
+    protected abstract String getEntityName();
 
     protected abstract Class<T> getClassEntity();
 
     public PageResponse<T> listar() throws IOException, InterruptedException {
-        return pocketBaseService.listar(entityName, getClassEntity());
+        return pocketBaseService.listar(getEntityName(), getClassEntity());
 
     }
 
     public T create(T t) throws IOException, InterruptedException {
-        return pocketBaseService.create(entityName, t, getClassEntity());
+        return pocketBaseService.create(getEntityName(), t, getClassEntity());
     }
 
     public T update(T entity) throws Exception {
-        return this.pocketBaseService.update(entityName, entity, getClassEntity(), entity.getId());
+        return this.pocketBaseService.update(getEntityName(), entity, getClassEntity(), entity.getId());
     }
 
     public void delete(String id) throws IOException, InterruptedException {
-        pocketBaseService.delete(entityName, id);
+        pocketBaseService.delete(getEntityName(), id);
     }
 
     public T getOne(String id) throws IOException, InterruptedException {
-        return pocketBaseService.getOne(entityName, getClassEntity(), id);
+        return pocketBaseService.getOne(getEntityName(), getClassEntity(), id);
     }
 
     protected PocketBaseService getPocketService() {

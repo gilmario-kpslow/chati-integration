@@ -21,7 +21,6 @@ public class UserDatabaseService extends DatabaseService<User> {
     private final HttpClient client;
 
     public UserDatabaseService() {
-        super("_pb_users_auth_");
         this.client = HttpClient.newHttpClient();
     }
 
@@ -38,12 +37,17 @@ public class UserDatabaseService extends DatabaseService<User> {
                 .uri(URI.create(new StringBuilder()
                         .append(getPocketService().getPocketbaseURL())
                         .append("/api/collections/")
-                        .append(entityName).append("/auth-with-password").toString()))
+                        .append(getEntityName()).append("/auth-with-password").toString()))
                 .POST(HttpRequest.BodyPublishers.ofString(JsonConverter.toJson(new LoginRequest("gilmario@gmail.com", "kpslow@0909"))))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         System.out.println(response.body());
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "_pb_users_auth_";
     }
 
 }

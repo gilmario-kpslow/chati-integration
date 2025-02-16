@@ -1,9 +1,9 @@
 <mat-card appearance="outlined" class="mb-3" [ngClass]="chat?.cor">
     <mat-card-header>
         <div class="d-flex justify-content-between w-100 header">
-            <mat-card-title class="text-overflow">{{chat?.titulo}}
-            </mat-card-title>
+            <mat-card-title class="text-overflow">{{chat?.titulo}}</mat-card-title>
             <div class="d-flex">
+                <mat-slide-toggle class="example-margin" [formControl]="ativo"></mat-slide-toggle>
                 <button mat-icon-button [matMenuTriggerFor]="menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
@@ -25,7 +25,7 @@
                     {{chat?.mensagem}}
                 </div>
             </div>
-            <div class="mt-2">
+            <!-- <div class="mt-2">
                 <div class="fw-bold">URL</div>
                 <div class="text-overflow">
                     {{chat?.url}}
@@ -36,7 +36,7 @@
                 <div class="text-overflow">
                     {{getUrl()}}
                 </div>
-            </div>
+            </div> -->
         </div>
     </mat-card-content>
 </mat-card>

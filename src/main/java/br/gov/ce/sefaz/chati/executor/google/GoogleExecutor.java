@@ -1,6 +1,8 @@
 package br.gov.ce.sefaz.chati.executor.google;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import br.gov.ce.sefaz.chati.ChatRegistro;
+import br.gov.ce.sefaz.chati.executor.Executor;
+import jakarta.enterprise.context.RequestScoped;
 import java.net.URI;
 import java.util.Optional;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -10,22 +12,23 @@ import org.eclipse.microprofile.rest.client.RestClientBuilder;
  *
  * @author gilmario
  */
-@ApplicationScoped
-public class GoogleExecutor {
+@RequestScoped
+public class GoogleExecutor implements Executor {
 
     @ConfigProperty(name = "proxy.host")
     Optional<String> proxyHost;
     @ConfigProperty(name = "proxy.port")
     Optional<Integer> proxyPort;
 
-    public void executar(String url, String mensagem) {
+    @Override
+    public void notificar(ChatRegistro chati, String mensagem) {
         RestClientBuilder builder = RestClientBuilder.newBuilder();
         if (proxyHost.isPresent() && proxyPort.isPresent()) {
             builder = builder.proxyAddress(proxyHost.get(), proxyPort.get());
         }
 
         GoogleChatServiceInterface service = builder
-                .baseUri(URI.create(url))
+                .baseUri(URI.create(chati.getUrl()))
                 .register(GoogleChatServiceOption.class)
                 .build(GoogleChatServiceInterface.class);
 

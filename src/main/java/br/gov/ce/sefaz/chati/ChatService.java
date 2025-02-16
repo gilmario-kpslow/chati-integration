@@ -2,19 +2,15 @@ package br.gov.ce.sefaz.chati;
 
 import br.gov.ce.sefaz.chati.core.DatabaseService;
 import br.gov.ce.sefaz.chati.core.GenericService;
-import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
+import br.gov.ce.sefaz.chati.executor.ExecutorService;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import br.gov.ce.sefaz.chati.websocket.Comando;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedMap;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -27,10 +23,13 @@ public class ChatService extends GenericService<ChatRegistro> {
     ChatDatabaseService databaseService;
 
     @Inject
-    GoogleExecutor executor;
+    ExecutorService executor;
 
     @Inject
     ChatSocket chatSocket;
+
+    @Inject
+    ChatiExecutor chatiExecutor;
 
     @Override
     public ChatRegistro saveOrUpdate(ChatRegistro registro) throws Exception {
@@ -62,56 +61,38 @@ public class ChatService extends GenericService<ChatRegistro> {
         if (Objects.isNull(registro.getUrl())) {
             throw new RuntimeException("Dados inválidos");
         }
-        if (!registro.getUrl().toLowerCase().startsWith("https://")) {
-            throw new RuntimeException("A URL e deve iniciar com https://");
-        }
+//        if (!registro.getUrl().toLowerCase().startsWith("https://")) {
+//            throw new RuntimeException("A URL e deve iniciar com https://");
+//        }
     }
 
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
-        ChatRegistro dto = lista().getItems().stream().filter(a -> a.getChave().equals(chave)).findFirst().get();
-        String mesagem = this.convertMessage(dto.getMensagem(), values);
-        executor.executar(dto.getUrl(), mesagem);
-        chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Executando notificação " + dto.getTitulo()).build());
+        ChatRegistro registro = lista().getItems().stream().filter(a -> a.getChave().equals(chave)).findFirst().get();
+        executor.notifica(registro, values);
+        chatSocket.broadcast(Comando.builder().comando("mensagem").mensagem("Executando notificação " + registro.getTitulo()).build());
     }
 
     @Override
     protected ChatRegistro save(ChatRegistro registro) throws Exception {
         registro.setChave(UUID.randomUUID().toString());
+        registro.setAtivo(Boolean.TRUE);
         return super.save(registro);
-    }
-
-    public void restoreBackup(List<ChatRegistro> lista) {
-        lista.stream().forEach(registro -> {
-            try {
-                super.save(registro);
-            } catch (Exception ex) {
-                Logger.getLogger(ChatService.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
     }
 
     public void notificar(String chave, MultivaluedMap<String, String> values) throws Exception {
         ChatRegistro dto = getOne(chave);
-        String mesagem = this.convertMessage(dto.getMensagem(), values);
-        chatSocket.broadcast(Comando.builder().comando("mensagem").mensagem(mesagem).build());
-    }
-
-    private String convertMessage(String mensagem, MultivaluedMap<String, String> values) {
-        String novaMesagem = mensagem;
-        if (Objects.nonNull(values)) {
-            for (Map.Entry<String, List<String>> entry : values.entrySet()) {
-                String key = entry.getKey();
-                List<String> value = entry.getValue();
-                novaMesagem = novaMesagem.replaceAll("\\$\\{" + key + "\\}", value.get(0));
-            }
-        }
-
-        return novaMesagem;
+        executor.notifica(dto, values, chatiExecutor);
     }
 
     @Override
     protected DatabaseService<ChatRegistro> getDatabaseService() {
         return databaseService;
+    }
+
+    public void ativar(String id) throws Exception {
+        ChatRegistro dto = getOne(id);
+        dto.setAtivo(!dto.getAtivo());
+        databaseService.update(dto);
     }
 
 }

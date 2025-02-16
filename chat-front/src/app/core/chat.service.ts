@@ -33,4 +33,8 @@ export class ChatService {
   notificar(id: string, params: any) {
     return this.http.get(`${this.url}registro/notificar/${id}?${params}`);
   }
+
+  ativar(id: string) {
+    return this.http.get(`${this.url}registro/ativar/${id}`);
+  }
 }

@@ -62,10 +62,16 @@ public class ChatResource {
     }
 
     @GET
-    @Path("notificar/{chave}")
-    public void notificar(@PathParam("chave") String chave, @Context UriInfo uriInfo) throws Exception {
-        MultivaluedMap<String, String> values = uriInfo.getQueryParameters();
-        service.notificar(chave, values);
+    @Path("notificar/{id}")
+    public void notificar(@PathParam("id") String chave, @Context UriInfo uriInfo) throws Exception {
+        service.notificar(chave, uriInfo.getQueryParameters());
+    }
+
+    @GET
+    @Path("ativar/{id}")
+    public void ativar(@PathParam("id") String id) throws Exception {
+        service.ativar(id);
+        System.out.println("OK");
     }
 
 }

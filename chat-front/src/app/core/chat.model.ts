@@ -6,4 +6,7 @@ export interface Chat extends Entity {
   url: string;
   cor: string;
   chave: string;
+  ativo: boolean;
+  provider: string;
+
 }

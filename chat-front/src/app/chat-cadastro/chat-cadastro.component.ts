@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -52,6 +52,9 @@ export class ChatCadastroComponent implements OnInit {
     mensagem: new FormControl(null, [Validators.required]),
     url: new FormControl(null, [Validators.required]),
     cor: new FormControl(null, [Validators.required]),
+    provider: new FormControl(null, [Validators.required]),
+    ativo: new FormControl(true),
+    chave: new FormControl(null),
   });
 
   ngOnInit(): void {
@@ -69,6 +72,11 @@ export class ChatCadastroComponent implements OnInit {
     'tema-fuscia',
     'tema-dark',
   ];
+
+  provedores: string[] = [
+    'CHATI',
+    'GOOGLE',
+  ]
 
   salvar() {
     if (this.form.valid) {

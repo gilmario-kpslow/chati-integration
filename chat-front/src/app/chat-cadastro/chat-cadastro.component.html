@@ -12,8 +12,16 @@
                     placeholder="Texto informado na mensagem"></app-input>
             </div>
             <div class="col-md-12 mb-3">
+                <app-select formControlName="provider" label="Provedor" placeholder="Provedor da notificação"
+                    [options]="provedores"></app-select>
+            </div>
+            <div class="col-md-12 mb-3">
                 <app-input formControlName="url" label="URL" placeholder="URL de notificar"></app-input>
             </div>
+            <!-- <div class="col-md-12 mb-3">
+                <app-input formControlName="ativo" label="Ativo"
+                    placeholder="Desabilita a execução da notificação"></app-input>
+            </div> -->
             <div class="col-md-12 mb-3">
                 <app-select formControlName="cor" label="Tema do Cartão" placeholder="URL de notificar"
                     [options]="temas"></app-select>

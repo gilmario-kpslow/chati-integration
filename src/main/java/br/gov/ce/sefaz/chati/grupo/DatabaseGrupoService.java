@@ -10,13 +10,14 @@ import jakarta.enterprise.context.Dependent;
 @Dependent
 public class DatabaseGrupoService extends DatabaseService<Grupo> {
 
-    public DatabaseGrupoService() {
-        super("grupo");
-    }
-
     @Override
     protected Class<Grupo> getClassEntity() {
         return Grupo.class;
+    }
+
+    @Override
+    protected String getEntityName() {
+        return "grupo";
     }
 
 }
