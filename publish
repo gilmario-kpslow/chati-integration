@@ -2,4 +2,4 @@
 
 docker push registry.gilmariosoftware.com.br/chat-integracao:latest
 
-docker push registry.gilmariosoftware.com.br/chat-integracao:2.0.1
+docker push registry.gilmariosoftware.com.br/chat-integracao:2.1.0

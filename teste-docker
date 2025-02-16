@@ -1,9 +1,14 @@
-#!/bin/bash
-docker run -d --rm --network local \
-    -e DB_URL=mongodb://root:root@mongodb:27017 \
-    -e NO_DB=false \
-    -e DB_NAME:chati \
-    -e RESTORE_ON_START="" \
-    -e FILE_STORE_PATH=/home/gilmario/chati \
+#! /bin/bash
+APP_NAME=chati
+
+docker rm -f $APP_NAME
+
+docker run -d \
+    --name $APP_NAME -d \
+    --network local \
     -p 8080:8080 \
-    chat-integracao:latest
+    -e POCKETBASE_URL=http://pocketbase:8080 \
+    -e POCKETBASE_USUARIO=chatintegracao@email.com \
+    -e POCKETBASE_SENHA=kpslow@0909 \
+    -e POCKETBASE_COLLECTION=chati \
+    registry.gilmariosoftware.com.br/chat-integracao:latest
