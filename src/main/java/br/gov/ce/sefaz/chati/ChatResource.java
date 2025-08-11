@@ -1,6 +1,5 @@
 package br.gov.ce.sefaz.chati;
 
-import br.gov.ce.sefaz.chati.pocketbase.PageResponse;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -13,6 +12,7 @@ import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.MultivaluedMap;
 import jakarta.ws.rs.core.UriInfo;
+import java.util.List;
 
 /**
  *
@@ -28,7 +28,7 @@ public class ChatResource {
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})
     public Response cadastro(ChatRegistro chat) throws Exception {
-        chat = service.saveOrUpdate(chat);
+        chat = service.criarAtualizar(chat);
         Response r = new Response();
         r.setResposta(chat.getId());
         return r;
@@ -36,22 +36,22 @@ public class ChatResource {
 
     @GET
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public PageResponse<ChatRegistro> getLista() throws Exception {
-        return service.lista();
+    public List<ChatRegistro> getLista() throws Exception {
+        return service.listarTodos();
     }
 
     @GET
     @Path("getid/{chave}")
     @Produces(value = {MediaType.APPLICATION_JSON})
     public ChatRegistro getListaChat(@PathParam("chave") String chave) throws Exception {
-        return service.getOne(chave);
+        return service.buscarPorChave(chave);
     }
 
     @DELETE
-    @Path("{chave}")
+//    @Path("")
     @Produces(value = {MediaType.APPLICATION_JSON})
-    public void delete(@PathParam("chave") String chave) throws Exception {
-        service.delete(chave);
+    public void delete(ChatRegistro chat) throws Exception {
+        service.deletar(chat);
     }
 
     @GET
@@ -71,7 +71,7 @@ public class ChatResource {
     @Path("ativar/{id}")
     public void ativar(@PathParam("id") String id) throws Exception {
         service.ativar(id);
-        System.out.println("OK");
+//        System.out.println("OK");
     }
 
 }

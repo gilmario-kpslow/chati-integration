@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Chat } from '../core/chat.model';
 import { ChatCardComponent } from '../chat-card/chat-card.component';
 import { CommonModule } from '@angular/common';
@@ -35,7 +35,7 @@ import { UserService } from '../core/user.service';
   styleUrl: './chat-list.component.css',
   standalone: true,
 })
-export class ChatListComponent implements OnInit {
+export class ChatListComponent implements OnInit, OnDestroy {
   chats: Chat[] = [];
   filtrados: Chat[] = [];
   service = inject(ChatService);
@@ -48,7 +48,6 @@ export class ChatListComponent implements OnInit {
   userService = inject(UserService);
 
   ngOnInit(): void {
-
     this.webSocket.event.subscribe(() => {
       this.subs?.unsubscribe();
 
@@ -68,7 +67,7 @@ export class ChatListComponent implements OnInit {
 
   pesquisar() {
     this.service.listar().subscribe((lista) => {
-      this.chats = lista.items;
+      this.chats = lista;
       this.filtrar();
     });
   }
@@ -95,5 +94,9 @@ export class ChatListComponent implements OnInit {
 
   limpar() {
     this.filtro.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.subs?.unsubscribe();
   }
 }

@@ -1,34 +1,37 @@
 package br.gov.ce.sefaz.chati.grupo;
 
-import br.gov.ce.sefaz.chati.core.GenericService;
-import jakarta.enterprise.context.ApplicationScoped;
+import br.gov.ce.sefaz.chati.pocketbase.PocketbaseService;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
-import java.util.Objects;
+import java.util.List;
 
 /**
  *
  * @author gilmario
  */
-@ApplicationScoped
-public class GrupoService extends GenericService<Grupo> {
+@Dependent
+public class GrupoService {
+
+    PocketbaseGrupoService service;
 
     @Inject
-    DatabaseGrupoService databaseService;
+    PocketbaseService pocketbaseService;
 
-    @Override
-    protected void validar(Grupo registro) {
-        if (Objects.isNull(registro)) {
-            throw new RuntimeException("Dados inválidos");
-        }
-
-        if (Objects.isNull(registro.getNome()) || registro.getNome().isBlank()) {
-            throw new RuntimeException("Titulo inválidos");
-        }
+    @PostConstruct
+    private void init() throws Exception {
+        service = pocketbaseService.getProvider().getServiceInstance(PocketbaseGrupoService.class, "grupo");
     }
 
-    @Override
-    protected DatabaseGrupoService getDatabaseService() {
-        return this.databaseService;
+    public Grupo criarAtualizar(Grupo registro) throws Exception {
+        return service.criarAtualizar(registro);
     }
 
+    public void deletar(String id) throws Exception {
+        service.deletar(id);
+    }
+
+    public List<Grupo> lista() throws Exception {
+        return service.listarTodos();
+    }
 }

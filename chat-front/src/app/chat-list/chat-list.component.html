@@ -33,3 +33,8 @@
     <app-chat-card [chat]="item"></app-chat-card>
   </div>
 </div>
+<div class="row p-3 mx-1 my-2 bg-light text-center border rounded" *ngIf="chats.length === 0">
+  <div class="col-md-12 ">
+    Não tem nada pra ver aqui
+  </div>
+</div>

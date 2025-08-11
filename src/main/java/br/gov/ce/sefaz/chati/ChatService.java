@@ -1,26 +1,26 @@
 package br.gov.ce.sefaz.chati;
 
-import br.gov.ce.sefaz.chati.core.DatabaseService;
-import br.gov.ce.sefaz.chati.core.GenericService;
+import br.com.pocketbase.http.ParametrosRequestBuilder;
 import br.gov.ce.sefaz.chati.executor.ExecutorService;
+import br.gov.ce.sefaz.chati.pocketbase.PocketbaseService;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import br.gov.ce.sefaz.chati.websocket.Comando;
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedMap;
-import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 /**
  *
  * @author gilmario
  */
-@RequestScoped
-public class ChatService extends GenericService<ChatRegistro> {
-
-    @Inject
-    ChatDatabaseService databaseService;
+@Dependent
+public class ChatService {
 
     @Inject
     ExecutorService executor;
@@ -31,68 +31,61 @@ public class ChatService extends GenericService<ChatRegistro> {
     @Inject
     ChatiExecutor chatiExecutor;
 
-    @Override
-    public ChatRegistro saveOrUpdate(ChatRegistro registro) throws Exception {
-        var resp = super.saveOrUpdate(registro);
+    @Inject
+    PocketbaseService pocketbaseService;
+
+    private ChatPocketbaseService service;
+
+    @ConfigProperty(name = "app.pocketbase.collection")
+    Optional<String> colecao;
+
+    @PostConstruct
+    private void init() throws Exception {
+        service = pocketbaseService.getProvider().getServiceInstance(ChatPocketbaseService.class, colecao.get());
+    }
+
+    public ChatRegistro criarAtualizar(ChatRegistro registro) throws Exception {
+        if (Objects.isNull(registro.getId())) {
+            registro.setChave(UUID.randomUUID().toString());
+            registro.setAtivo(Boolean.TRUE);
+        }
+        ChatRegistro resp = service.criarAtualizar(registro);
         chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Salvar ou atualizar").build());
         return resp;
     }
 
-    @Override
-    public void delete(String id) throws IOException, InterruptedException {
-        super.delete(id);
+    public void deletar(ChatRegistro t) throws Exception {
+        service.deletar(t);
         chatSocket.broadcast(Comando.builder().comando("pesquisar").mensagem("Deletar").build());
     }
 
-    @Override
-    protected void validar(ChatRegistro registro) {
-        if (Objects.isNull(registro)) {
-            throw new RuntimeException("Dados inválidos");
-        }
-
-        if (Objects.nonNull(registro.getId()) && registro.getId().isBlank()) {
-            registro.setId(null);
-        }
-
-        if (Objects.isNull(registro.getTitulo()) || registro.getTitulo().isBlank()) {
-            throw new RuntimeException("Titulo inválidos");
-        }
-
-        if (Objects.isNull(registro.getUrl())) {
-            throw new RuntimeException("Dados inválidos");
-        }
-//        if (!registro.getUrl().toLowerCase().startsWith("https://")) {
-//            throw new RuntimeException("A URL e deve iniciar com https://");
-//        }
-    }
-
     public void execute(String chave, MultivaluedMap<String, String> values) throws Exception {
-        ChatRegistro registro = lista().getItems().stream().filter(a -> a.getChave().equals(chave)).findFirst().get();
+        ChatRegistro registro = buscarPorChave(chave);
         executor.notifica(registro, values);
         chatSocket.broadcast(Comando.builder().comando("mensagem").mensagem("Executando notificação " + registro.getTitulo()).build());
     }
 
-    @Override
-    protected ChatRegistro save(ChatRegistro registro) throws Exception {
-        registro.setChave(UUID.randomUUID().toString());
-        registro.setAtivo(Boolean.TRUE);
-        return super.save(registro);
-    }
-
     public void notificar(String chave, MultivaluedMap<String, String> values) throws Exception {
-        ChatRegistro dto = getOne(chave);
+        ChatRegistro dto = buscarPorChave(chave);
         executor.notifica(dto, values, chatiExecutor);
     }
 
-    @Override
-    protected DatabaseService<ChatRegistro> getDatabaseService() {
-        return databaseService;
+    public void ativar(String id) throws Exception {
+        ChatRegistro dto = service.buscarPorId(id);
+        dto.setAtivo(!dto.getAtivo());
+        service.atualizar(dto);
     }
 
-    public void ativar(String id) throws Exception {
-        ChatRegistro dto = getOne(id);
-        dto.setAtivo(!dto.getAtivo());
-        databaseService.update(dto);
+    public ChatRegistro buscarPorChave(String chave) throws Exception {
+        Optional<ChatRegistro> op = service.paginar(new ParametrosRequestBuilder().filter("chave='" + chave + "'").build()).getItems().stream().findFirst();
+        if (op.isPresent()) {
+            return op.get();
+        }
+        return null;
+    }
+
+    public List<ChatRegistro> listarTodos() throws Exception {
+        return service.listarTodos();
     }
 
 }
