@@ -16,12 +16,12 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { ErroPipe } from './pipe-error';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [ReactiveFormsModule, ErroPipe, CommonModule],
+  imports: [ReactiveFormsModule, ErroPipe],
   templateUrl: './layout-input.component.html',
   styleUrls: ['./layout-input.component.css'],
   providers: [

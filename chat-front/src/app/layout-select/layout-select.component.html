@@ -1,9 +1,13 @@
 <div class="w-100 pb-2">
-    <label class="fw-bold">{{label}}</label>
-    <select class="form-control" [formControl]="form" class="w-100">
-        <option [value]="null">-- Selecione --</option>
-        <option *ngFor="let o of options" [value]="o">{{o}}</option>
-    </select>
+  <label class="fw-bold">{{label}}</label>
+  <select class="form-control" [formControl]="form" class="w-100">
+    <option [value]="null">-- Selecione --</option>
+    @for (o of options; track o) {
+      <option [value]="o">{{o}}</option>
+    }
+  </select>
 
-    <div class="px-2 error text-danger fw-bold" *ngIf="hasError()">{{errorMessage | appErro}}</div>
+  @if (hasError()) {
+    <div class="px-2 error text-danger fw-bold">{{errorMessage | appErro}}</div>
+  }
 </div>

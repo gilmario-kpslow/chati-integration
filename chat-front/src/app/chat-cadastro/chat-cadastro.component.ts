@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { ChatService } from '../core/chat.service';
-import { CommonModule } from '@angular/common';
+
 import { LayoutInputComponent } from '../layout-input/layout-input.component';
 import { LayoutSelectComponent } from '../layout-select/layout-select.component';
 import { MensagemService } from '../mensagens/messagem.service';
@@ -27,15 +27,14 @@ import { AppService } from '../core/app.service';
   imports: [
     ReactiveFormsModule,
     FormsModule,
-    CommonModule,
     LayoutInputComponent,
     LayoutSelectComponent,
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatButtonModule,
-  ],
+    MatButtonModule
+],
   templateUrl: './chat-cadastro.component.html',
   styleUrl: './chat-cadastro.component.css',
 })

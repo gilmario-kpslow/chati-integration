@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import {
   Component,
   ElementRef,
@@ -21,7 +21,7 @@ import { ErroPipe } from '../layout-input/pipe-error';
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, ErroPipe],
+  imports: [ReactiveFormsModule, ErroPipe],
   templateUrl: './layout-select.component.html',
   styleUrl: './layout-select.component.css',
   providers: [

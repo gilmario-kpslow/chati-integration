@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+
 import { Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -13,13 +13,12 @@ import {
 @Component({
   selector: 'app-pergunta',
   imports: [
-    CommonModule,
     MatDialogTitle,
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatButtonModule,
-  ],
+    MatButtonModule
+],
   templateUrl: './pergunta.component.html',
   styleUrl: './pergunta.component.css',
 })

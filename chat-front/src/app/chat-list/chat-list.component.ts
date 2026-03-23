@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { Chat } from '../core/chat.model';
 import { ChatCardComponent } from '../chat-card/chat-card.component';
-import { CommonModule } from '@angular/common';
+
 import {
   MatCard,
   MatCardContent,
@@ -22,15 +22,14 @@ import { UserService } from '../core/user.service';
   selector: 'app-chat-list',
   imports: [
     ChatCardComponent,
-    CommonModule,
     MatCard,
     MatCardHeader,
     MatCardContent,
     MatCardTitle,
     MatIconModule,
     MatButtonModule,
-    ReactiveFormsModule,
-  ],
+    ReactiveFormsModule
+],
   templateUrl: './chat-list.component.html',
   styleUrl: './chat-list.component.css',
   standalone: true,
