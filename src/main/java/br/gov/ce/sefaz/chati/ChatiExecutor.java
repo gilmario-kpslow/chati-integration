@@ -3,6 +3,7 @@ package br.gov.ce.sefaz.chati;
 import br.gov.ce.sefaz.chati.executor.Executor;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import br.gov.ce.sefaz.chati.websocket.Comando;
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
@@ -14,6 +15,7 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class ChatiExecutor implements Executor {
  
+    @PostConstruct
     public void init() {
         System.out.println("INIIIIITTTTT");
     }

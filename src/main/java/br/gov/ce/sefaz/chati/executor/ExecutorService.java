@@ -7,6 +7,7 @@ import static br.gov.ce.sefaz.chati.executor.ProvidersEnum.GOOGLE;
 import br.gov.ce.sefaz.chati.executor.google.GoogleExecutor;
 import br.gov.ce.sefaz.chati.websocket.ChatSocket;
 import br.gov.ce.sefaz.chati.websocket.Comando;
+import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.MultivaluedMap;
@@ -18,7 +19,7 @@ import java.util.Objects;
  *
  * @author gilmario
  */
-@RequestScoped
+@ApplicationScoped
 public class ExecutorService {
 
     @Inject

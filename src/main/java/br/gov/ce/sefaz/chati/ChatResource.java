@@ -1,5 +1,6 @@
 package br.gov.ce.sefaz.chati;
 
+import br.gov.ce.sefaz.kafka.MensagemProducer;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -23,6 +24,9 @@ public class ChatResource {
 
     @Inject
     ChatService service;
+
+    @Inject
+    MensagemProducer producer;
 
     @POST
     @Consumes(value = {MediaType.APPLICATION_JSON})
@@ -72,6 +76,12 @@ public class ChatResource {
     public void ativar(@PathParam("id") String id) throws Exception {
         service.ativar(id);
 //        System.out.println("OK");
+    }
+
+    @GET
+    @Path("kafka")
+    public void testeKafka() throws Exception {
+        producer.publicaMensagem("Mensagem estranha teste.");
     }
 
 }

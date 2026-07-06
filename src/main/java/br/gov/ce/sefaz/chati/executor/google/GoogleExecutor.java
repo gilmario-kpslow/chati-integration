@@ -27,7 +27,8 @@ public class GoogleExecutor implements Executor {
     GoogleChatServiceInterface service;
 
     @PostConstruct
-    private void init() {
+    public void init() {
+        System.out.println("br.gov.ce.sefaz.chati.executor.google.GoogleExecutor.init()");
         RestClientBuilder builder = RestClientBuilder.newBuilder();
         if (proxyHost.isPresent() && proxyPort.isPresent()) {
             builder = builder.proxyAddress(proxyHost.get(), proxyPort.get());
@@ -50,7 +51,7 @@ public class GoogleExecutor implements Executor {
 
     @PreDestroy
     private void close() {
-
+        System.out.println("br.gov.ce.sefaz.chati.executor.google.GoogleExecutor.close()");
     }
 
 }
